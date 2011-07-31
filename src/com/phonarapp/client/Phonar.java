@@ -13,8 +13,6 @@ import android.view.View;
 import android.widget.Button;
 
 public class Phonar extends Activity {
-	/** debugging tag used throughout the application */
-	public static final String TAG = "phonar";
 	//POIs
 	private List<WikitudePOI> pois;
 

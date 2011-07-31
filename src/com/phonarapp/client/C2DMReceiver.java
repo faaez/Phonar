@@ -19,7 +19,7 @@ public class C2DMReceiver extends BroadcastReceiver {
 		} else if (intent.getAction().equals(
 				"com.google.android.c2dm.intent.RECEIVE")) {
 			// handleMessage(context, intent);
-	    	Log.d(Phonar.TAG, intent.getStringExtra("lol"));
+	    	Log.d(PhonarApplication.TAG, intent.getStringExtra("lol"));
 		}
 	}
 
@@ -33,7 +33,8 @@ public class C2DMReceiver extends BroadcastReceiver {
 			// Send registration ID to 3rd party site
 			// This should be done in a separate thread.
 			// When done, remember that all registration is done.
-			Log.d(Phonar.TAG, "about to upload -- it came in: " + registration);
+			Log.d(PhonarApplication.TAG,
+					"about to upload -- it came in: " + registration);
 			new AsyncTask<String, Void, Void>() {
 				@Override
 				protected Void doInBackground(String... registration) {
@@ -44,7 +45,7 @@ public class C2DMReceiver extends BroadcastReceiver {
 						HttpClient httpclient = new DefaultHttpClient();
 					    httpclient.execute(new HttpGet(url));
 					} catch (Exception e) {
-						Log.e(Phonar.TAG, "Network exception: " + e);
+						Log.e(PhonarApplication.TAG, "Network exception: " + e);
 					}
 					return null;
 				}
