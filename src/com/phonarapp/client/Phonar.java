@@ -1,11 +1,9 @@
 package com.phonarapp.client;
 
 import java.util.HashMap;
-import java.util.List;
 
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.openintents.intents.WikitudePOI;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -22,7 +20,6 @@ import android.widget.Button;
 import android.widget.EditText;
 
 public class Phonar extends Activity {
-	private List<WikitudePOI> pois;
 	private EditText mUserNumberEditText;
 
 	private final OnClickListener mSaveClickListener = new OnClickListener() {
