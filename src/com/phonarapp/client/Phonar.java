@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -20,6 +21,7 @@ public class Phonar extends Activity {
 		Button registerButton = (Button) findViewById(R.id.register_button);
 		registerButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
+				Log.d("phonar", "clicked");
 				Intent registrationIntent = new Intent(
 						"com.google.android.c2dm.intent.REGISTER");
 				registrationIntent.putExtra("app", PendingIntent
