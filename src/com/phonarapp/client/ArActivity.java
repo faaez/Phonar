@@ -15,7 +15,7 @@ import android.view.View;
 import android.widget.Button;
 
 public class ArActivity extends Activity {
-	private static final String APP_KEY = "9792884b-5330-4ae5-9515-9015787f7e4c";
+	private static final String API_KEY = "269fdec1-154d-4b7f-84f6-77ffc33abf00";
 	private static final String DEVELOPER_NAME = "Faaez Ul Haq";
 	
 	/** the callback-intent after pressing any buttons */
@@ -60,7 +60,7 @@ public class ArActivity extends Activity {
 	private WikitudeARIntent prepareIntent() {
 		// create the intent
 		WikitudeARIntent intent = new WikitudeARIntent(this.getApplication(),
-				APP_KEY, DEVELOPER_NAME);
+				API_KEY, DEVELOPER_NAME);
 		//Add POIs
 		addPois(intent);
 		
@@ -73,15 +73,15 @@ public class ArActivity extends Activity {
 	 *   the intent
 	 */
 	private void addPois(WikitudeARIntent intent) {
-		WikitudePOI poi1 = new WikitudePOI(35.683333, 139.766667, 36, "Clem Wright", "");
+		WikitudePOI poi1 = new WikitudePOI(35.683333, -139.766667, 36, "Clem Wright", "");
 		poi1.setDetailAction(ArActivity.CALLBACK_INTENT);
-		WikitudePOI poi2 = new WikitudePOI(41.9, 12.5, 14, "Jorge Lugo",
+		WikitudePOI poi2 = new WikitudePOI(37.7793, -122.4192, 14, "Jorge Lugo",
                 "");
 		poi2.setDetailAction(ArActivity.CALLBACK_INTENT);
-        WikitudePOI poi3 = new WikitudePOI(40.716667, -74, 1, "Jeff Hodes",
+        WikitudePOI poi3 = new WikitudePOI(38, -123, 1, "Jeff Hodes",
                 "");
         poi3.setDetailAction(ArActivity.CALLBACK_INTENT);
-        WikitudePOI poi4 = new WikitudePOI(48.208333, 16.373056, 220, "Faaez Ul Haq",
+        WikitudePOI poi4 = new WikitudePOI(36, -125, 220, "Faaez Ul Haq",
                 "");
         poi4.setDetailAction(ArActivity.CALLBACK_INTENT);
         List<WikitudePOI> pois = new ArrayList<WikitudePOI>();
