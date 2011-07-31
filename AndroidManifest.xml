@@ -21,8 +21,7 @@
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
-		<activity android:name=".ArActivity">
-        </activity>
+		<activity android:name=".ArActivity" />
 
 		<!-- Only C2DM servers can send messages for the app. If permission is 
 			not set - any other app can generate it -->
