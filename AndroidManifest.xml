@@ -19,7 +19,8 @@
 
 	<application android:name=".PhonarApplication" android:icon="@drawable/icon"
 	       android:label="@string/app_name">
-	    
+	    <uses-library android:name="com.google.android.maps" />
+	    <uses-permission android:name="android.permission.INTERNET" />
 	    <!-- Activities -->
 		<activity android:name=".Phonar" android:label="@string/app_name">
 			<intent-filter>
@@ -28,6 +29,7 @@
 			</intent-filter>
 		</activity>
 		<activity android:name=".ArActivity" />
+		<activity android:name=".PhonarMapActivity" />
 
 		<!-- Only C2DM servers can send messages for the app. If permission is 
 			not set - any other app can generate it -->

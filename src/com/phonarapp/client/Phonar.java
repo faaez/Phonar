@@ -1,5 +1,6 @@
 package com.phonarapp.client;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.http.client.methods.HttpGet;
@@ -84,12 +85,17 @@ public class Phonar extends Activity {
 				.putString(KEY_USER_NUMBER, number).commit();
 	}
 
+	//POIs
+	private HashMap<String, Person> people;
+
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 		final Context context = this;
+
+		this.people = getPeopleForDebugging();
 
 		Button registerButton = (Button) findViewById(R.id.register_button);
 		registerButton.setOnClickListener(new View.OnClickListener() {
@@ -135,14 +141,35 @@ public class Phonar extends Activity {
         		.getString(KEY_USER_NUMBER, null) == null) {
         	showDialog(DIALOG_ENTER_USER_NUMBER_ID);
         }
+
+        Button mapButton = (Button) findViewById(R.id.map_button);
+        mapButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent mapIntent = new Intent(context, PhonarMapActivity.class);
+                Phonar.this.startActivity(mapIntent);
+            }
+        });
 	}
 
-	public void setPois(List<WikitudePOI> pois) {
-		this.pois = pois;
+	public static HashMap<String, Person> getPeopleForDebugging() {
+		HashMap<String, Person> people = new HashMap<String, Person>();
+		Person person = new Person("12", "Clem", 37.7793, -122.4192, 36);
+		people.put("12", person);
+		person = new Person("34", "Jorge", 36.683333, -128.766667, 36);
+		people.put("34", person);
+		person = new Person("56", "Jeff", 37.683333, -137.766667, 36);
+		people.put("56", person);
+		person = new Person("78", "Faaez", 38.683333, -146.766667, 36);
+		people.put("78", person);
+
+		return people;
 	}
 
-	public List<WikitudePOI> getPois() {
-		return pois;
+	public void setPeople(HashMap<String, Person> people) {
+		this.people = people;
+	}
 
+	public HashMap<String, Person> getPeople() {
+		return people;
 	}
 }

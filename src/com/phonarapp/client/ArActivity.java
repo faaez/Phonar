@@ -31,13 +31,7 @@ public class ArActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.arview);
-
-		Button b = (Button) findViewById(R.id.button1);
-        b.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                startArView();
-            }
-        });
+		startArView();
 	}
 
 	/**
@@ -84,6 +78,8 @@ public class ArActivity extends Activity {
         pois.add(poi3);
         pois.add(poi4);
         intent.addPOIs(pois);
+        
+        ((PhonarApplication)this.getApplication()).setPois(pois);
 
         //do something with application
 	}

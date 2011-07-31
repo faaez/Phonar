@@ -5,5 +5,10 @@
     <string name="unregister">wtf phonar</string>
     <string name="callback">In callback</string>
     <string name="ar_name">Augmented Reality</string>
+<<<<<<< HEAD
     <string name="phonar">phonar someone :O</string>
+=======
+    <string name="poll">poll</string>
+    <string name="map_name">View Friends on Map</string>
+>>>>>>> 465aa22b19692298d4491d84f70a23065ead71d4
 </resources>
