@@ -12,7 +12,6 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 
 /**
  * Receives both registration information and messages from our server.
@@ -49,9 +48,11 @@ public class C2DMReceiver extends BroadcastReceiver {
 		    Log.d(PhonarApplication.TAG, "latitude: " + location.getLatitude());
 		    // TODO: might want to do this in another thread
 		    try {
+		    	Log.d(PhonarApplication.TAG, "number: " + mExternalNumber);
+		    	Log.d(PhonarApplication.TAG, "target: " + mMyNumber);
 				String url = PhonarApplication.LOCATION_REPORT_URL
-					+ STALKEE_NUMBER + "=" + mMyNumber + "&"
-					+ TARGET_NUMBER + "=" + mExternalNumber + "&"
+					+ STALKEE_NUMBER + "=" + mExternalNumber + "&"
+					+ TARGET_NUMBER + "=" + mMyNumber + "&"
 					+ STALKEE_LONGITUDE + "=" + location.getLongitude() + "&"
 					+ STALKEE_LATITUDE + "=" + location.getLatitude() + "&"
 					+ STALKEE_ALTITUDE + "=" + location.getAltitude();
@@ -81,12 +82,14 @@ public class C2DMReceiver extends BroadcastReceiver {
 		mMyNumber = getNumber(context);
 		if (intent.getAction().equals(
 				"com.google.android.c2dm.intent.REGISTRATION")) {
+			Log.d(PhonarApplication.TAG, "registration");
 			handleRegistration(context, intent);
 		} else if (intent.getAction().equals(
 				"com.google.android.c2dm.intent.RECEIVE")) {
 			Log.d(PhonarApplication.TAG, "about to handle message that came");
 			handleMessage(context, intent);
 		}
+		Log.d(PhonarApplication.TAG, "nothing...");
 	}
 
 	/**
@@ -100,12 +103,12 @@ public class C2DMReceiver extends BroadcastReceiver {
 			// blah
 			Log.d(PhonarApplication.TAG,
 					intent.getStringExtra(STALKEE_LATITUDE));
-			Toast.makeText(context, intent.getStringExtra(STALKEE_ALTITUDE),
-					Toast.LENGTH_LONG);
 		} else if (TYPE_REQUESTING_LOCATION.equals(type)){
 			// Ask user if they want to share with this person and share if so.
 
-			final String number = intent.getStringExtra(STALKER_NUMBER);
+			final String number = intent.getStringExtra(STALKEE_NUMBER);
+			Log.d(PhonarApplication.TAG,
+					"extracted number in type_request_location: " + number);
 
 			// use contacts to find the name of the person with the #
 

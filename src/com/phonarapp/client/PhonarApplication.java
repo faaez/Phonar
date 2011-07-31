@@ -26,7 +26,7 @@ public class PhonarApplication extends Application {
 			"http://phonarapp.appspot.com/register?";
 	/** the URL for requesting location */
 	public static final String LOCATION_REQUEST_URL =
-			"http://phonarapp.appspot.com/server?";
+			"http://phonarapp.appspot.com/phonarserver?";
 	/** the URL for providing location to whom requested it */
 	public static final String LOCATION_REPORT_URL =
 			"http://phonarapp.appspot.com/locationreport?";

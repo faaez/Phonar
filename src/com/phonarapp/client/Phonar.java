@@ -21,6 +21,7 @@ import android.widget.EditText;
 
 public class Phonar extends Activity {
 	private EditText mUserNumberEditText;
+	private EditText mTargetNumber;
 
 	private final OnClickListener mSaveClickListener = new OnClickListener() {
 		public void onClick(DialogInterface dialog, int which) {
@@ -37,7 +38,7 @@ public class Phonar extends Activity {
 					+ PhonarApplication.MY_NUMBER_PARAM + "="
 					+ C2DMReceiver.getNumber(Phonar.this)
 					+ "&" + PhonarApplication.TARGET_NUMBER_PARAM + "="
-					+ mUserNumberEditText.getText().toString();
+					+ mTargetNumber.getText().toString();
 				new DefaultHttpClient().execute(new HttpGet(url));
 			} catch (Exception e) {
 				Log.e(PhonarApplication.TAG, "Network exception: " + e);
@@ -62,9 +63,9 @@ public class Phonar extends Activity {
 	        break;
 	    case DIALOG_ENTER_EXTERNAL_NUMBER_ID:
 	    	AlertDialog.Builder externalBuilder = new AlertDialog.Builder(this);
-	    	mUserNumberEditText = new EditText(this);
+	    	mTargetNumber = new EditText(this);
 	    	externalBuilder.setPositiveButton("BRONAR!", mBronarClickListener)
-	        		.setView(mUserNumberEditText);
+	        		.setView(mTargetNumber);
 	        dialog = externalBuilder.create();
 	    	break;
 	    default:
