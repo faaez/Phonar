@@ -1,11 +1,10 @@
 package com.phonarapp.client;
 
-import java.util.List;
+import java.util.HashMap;
 
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.openintents.intents.WikitudePOI;
 
 import android.app.Activity;
 import android.app.PendingIntent;
@@ -19,7 +18,8 @@ import android.widget.Button;
 
 public class Phonar extends Activity {
 	//POIs
-	private List<WikitudePOI> pois;
+	private HashMap<String, Person> people;
+	
 
 	/** Called when the activity is first created. */
 	@Override
@@ -27,6 +27,8 @@ public class Phonar extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 		final Context context = this;
+		
+		this.people = getPeopleForDebugging();
 
 		Button registerButton = (Button) findViewById(R.id.register_button);
 		registerButton.setOnClickListener(new View.OnClickListener() {
@@ -92,12 +94,26 @@ public class Phonar extends Activity {
             }
         });
 	}
-
-	public void setPois(List<WikitudePOI> pois) {
-		this.pois = pois;
+	
+	public static HashMap<String, Person> getPeopleForDebugging() {
+		HashMap<String, Person> people = new HashMap<String, Person>();
+		Person person = new Person("12", "Clem", 37.7793, -122.4192, 36);
+		people.put("12", person);
+		person = new Person("34", "Jorge", 36.683333, -128.766667, 36);
+		people.put("34", person);
+		person = new Person("56", "Jeff", 37.683333, -137.766667, 36);
+		people.put("56", person);
+		person = new Person("78", "Faaez", 38.683333, -146.766667, 36);
+		people.put("78", person);
+		
+		return people;
 	}
 
-	public List<WikitudePOI> getPois() {
-		return pois;
+	public void setPeople(HashMap<String, Person> people) {
+		this.people = people;
+	}
+
+	public HashMap<String, Person> getPeople() {
+		return people;
 	}
 }

@@ -31,7 +31,7 @@ public class CallbackActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.setContentView(R.layout.callback_layout);
-		pois = ((Phonar) this.getParent()).getPois();
+		pois = ((PhonarApplication) this.getApplication()).getPois();
 		poiId = this.getIntent().getIntExtra(
 				WikitudeARIntentHelper.EXTRA_INDEX_SELECTED_POI, -1);
 

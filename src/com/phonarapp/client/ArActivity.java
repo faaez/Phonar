@@ -78,6 +78,8 @@ public class ArActivity extends Activity {
         pois.add(poi3);
         pois.add(poi4);
         intent.addPOIs(pois);
+        
+        ((PhonarApplication)this.getApplication()).setPois(pois);
 
         //do something with application
 	}
