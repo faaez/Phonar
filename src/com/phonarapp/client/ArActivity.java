@@ -31,13 +31,7 @@ public class ArActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.arview);
-
-		Button b = (Button) findViewById(R.id.button1);
-        b.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                startArView();
-            }
-        });
+		startArView();
 	}
 
 	/**

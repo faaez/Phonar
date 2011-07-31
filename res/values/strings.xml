@@ -6,4 +6,5 @@
     <string name="callback">In callback</string>
     <string name="ar_name">Augmented Reality</string>
     <string name="poll">poll</string>
+    <string name="map_name">View Friends on Map</string>
 </resources>

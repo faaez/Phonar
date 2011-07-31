@@ -83,6 +83,14 @@ public class Phonar extends Activity {
                 Phonar.this.startActivity(arIntent);
             }
         });
+        
+        Button mapButton = (Button) findViewById(R.id.map_button);
+        mapButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent mapIntent = new Intent(context, PhonarMapActivity.class);
+                Phonar.this.startActivity(mapIntent);
+            }
+        });
 	}
 
 	public void setPois(List<WikitudePOI> pois) {
@@ -91,6 +99,5 @@ public class Phonar extends Activity {
 
 	public List<WikitudePOI> getPois() {
 		return pois;
-
 	}
 }
