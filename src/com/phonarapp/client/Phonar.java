@@ -52,11 +52,11 @@ public class Phonar extends Activity {
 		Button arButton = (Button) findViewById(R.id.ar_button);
         arButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent arIntent = new Intent();
-                arIntent.setClassName("com.phonarapp.client", "com.phonarapp.client.ArActivity");
-                startActivity(arIntent);
+                Intent arIntent = new Intent(context, ArActivity.class);
+                Phonar.this.startActivity(arIntent);
             }
         });
+	}
 		
 	public void setPois(List<WikitudePOI> pois) {
 		this.pois = pois;
