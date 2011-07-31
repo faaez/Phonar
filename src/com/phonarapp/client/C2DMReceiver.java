@@ -17,11 +17,13 @@ import android.widget.Toast;
 public class C2DMReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
+		Log.d(PhonarApplication.TAG, "receiving something...");
 		if (intent.getAction().equals(
 				"com.google.android.c2dm.intent.REGISTRATION")) {
 			handleRegistration(context, intent);
 		} else if (intent.getAction().equals(
 				"com.google.android.c2dm.intent.RECEIVE")) {
+			Log.d(PhonarApplication.TAG, "about to handle message that came");
 			handleMessage(context, intent);
 		}
 	}
@@ -35,6 +37,9 @@ public class C2DMReceiver extends BroadcastReceiver {
 		String message = intent.getStringExtra("lol");
 		if (message != null) {
 			(Toast.makeText(context, message, Toast.LENGTH_LONG)).show();
+		} else {
+			Log.e(PhonarApplication.TAG, "Message came back null. Did we give"
+					+ "it the right name?");
 		}
 	}
 

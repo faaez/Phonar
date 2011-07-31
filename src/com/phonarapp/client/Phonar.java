@@ -62,7 +62,8 @@ public class Phonar extends Activity {
 						try {
 							// TODO: this is magical. should be device number
 							String url = "http://phonarapp.appspot.com/"
-								+ "phonarserver?target=3474704757";
+								+ "phonarserver?target=3474704757"
+								+ "&number=3474704757";
 							HttpClient httpclient = new DefaultHttpClient();
 						    httpclient.execute(new HttpGet(url));
 						    Log.d(PhonarApplication.TAG, "done polling");
