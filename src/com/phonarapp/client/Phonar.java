@@ -1,11 +1,9 @@
 package com.phonarapp.client;
 
 import java.util.HashMap;
-import java.util.List;
 
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.openintents.intents.WikitudePOI;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -22,7 +20,6 @@ import android.widget.Button;
 import android.widget.EditText;
 
 public class Phonar extends Activity {
-	private List<WikitudePOI> pois;
 	private EditText mUserNumberEditText;
 
 	private final OnClickListener mSaveClickListener = new OnClickListener() {
@@ -66,7 +63,7 @@ public class Phonar extends Activity {
 	    case DIALOG_ENTER_EXTERNAL_NUMBER_ID:
 	    	AlertDialog.Builder externalBuilder = new AlertDialog.Builder(this);
 	    	mUserNumberEditText = new EditText(this);
-	    	externalBuilder.setPositiveButton("SAVE!", mBronarClickListener)
+	    	externalBuilder.setPositiveButton("BRONAR!", mBronarClickListener)
 	        		.setView(mUserNumberEditText);
 	        dialog = externalBuilder.create();
 	    	break;
@@ -124,7 +121,7 @@ public class Phonar extends Activity {
 		Button phonarButton = (Button) findViewById(R.id.phonar_button);
         phonarButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
+            	showDialog(DIALOG_ENTER_EXTERNAL_NUMBER_ID);
             }
         });
 
