@@ -16,5 +16,5 @@
         android:layout_height="wrap_content" 
         android:text="@string/unregister"
     />
-<Button android:text="Button" android:id="@+id/button1" android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>
+<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/ar_button" android:text="@string/ar_name"></Button>
 </LinearLayout>

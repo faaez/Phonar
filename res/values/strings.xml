@@ -3,4 +3,6 @@
     <string name="register">lol phonar</string>
     <string name="app_name">Phonar</string>
     <string name="unregister">wtf phonar</string>
+    <string name="callback">In callback</string>
+    <string name="ar_name">Augmented Reality</string>
 </resources>

@@ -1,5 +1,9 @@
 package com.phonarapp.client;
 
+import java.util.List;
+
+import org.openintents.intents.WikitudePOI;
+
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -11,7 +15,9 @@ import android.widget.Button;
 public class Phonar extends Activity {
 	/** debugging tag used throughout the application */
 	public static final String TAG = "phonar";
-	
+	//POIs
+	private List<WikitudePOI> pois;
+
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -42,5 +48,22 @@ public class Phonar extends Activity {
 				startService(unregIntent);
 			}
 		});
+
+		Button arButton = (Button) findViewById(R.id.ar_button);
+        arButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent arIntent = new Intent(context, ArActivity.class);
+                Phonar.this.startActivity(arIntent);
+            }
+        });
+	}
+
+	public void setPois(List<WikitudePOI> pois) {
+		this.pois = pois;
+	}
+
+	public List<WikitudePOI> getPois() {
+		return pois;
+
 	}
 }
