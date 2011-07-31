@@ -9,7 +9,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
+/**
+ * Receives both registration information and messages from our server.
+ */
 public class C2DMReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
@@ -18,11 +22,27 @@ public class C2DMReceiver extends BroadcastReceiver {
 			handleRegistration(context, intent);
 		} else if (intent.getAction().equals(
 				"com.google.android.c2dm.intent.RECEIVE")) {
-			// handleMessage(context, intent);
-	    	Log.d(PhonarApplication.TAG, intent.getStringExtra("lol"));
+			handleMessage(context, intent);
 		}
 	}
 
+	/**
+	 * Handles messages received from our server, stored as extras in the
+	 * intent. (The names of these extras should be defined in the common
+	 * library.)
+	 */
+	private void handleMessage(Context context, Intent intent) {
+		String message = intent.getStringExtra("lol");
+		if (message != null) {
+			(Toast.makeText(context, message, Toast.LENGTH_LONG)).show();
+		}
+	}
+
+	/**
+	 * Handles the registration of this app for this device. Should handle
+	 * errors, unregistered, and new registrations. Be ready to re-register
+	 * when Google refreshes the registration ID (happens periodically).
+	 */
 	private void handleRegistration(Context context, Intent intent) {
 		String registration = intent.getStringExtra("registration_id");
 		if (intent.getStringExtra("error") != null) {
@@ -30,15 +50,12 @@ public class C2DMReceiver extends BroadcastReceiver {
 		} else if (intent.getStringExtra("unregistered") != null) {
 			// unregistered; new messages will be rejected
 		} else if (registration != null) {
-			// Send registration ID to 3rd party site
-			// This should be done in a separate thread.
 			// When done, remember that all registration is done.
-			Log.d(PhonarApplication.TAG,
-					"about to upload -- it came in: " + registration);
 			new AsyncTask<String, Void, Void>() {
 				@Override
 				protected Void doInBackground(String... registration) {
 					try {
+						// TODO: this is magical. should be device number
 						String baseUrl = "http://phonarapp.appspot.com/register"
 							+ "?number=3474704757&registrationId=";
 						String url = baseUrl + registration[0];
