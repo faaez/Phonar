@@ -17,10 +17,10 @@
         android:text="@string/unregister"
     />
     <Button
-        android:id="@+id/poll_button"
-        android:layout_width="fill_parent" 
-        android:layout_height="wrap_content" 
-        android:text="@string/poll"
+        android:id="@+id/phonar_button"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/phonar"
     />
     <Button
         android:id="@+id/ar_button"
