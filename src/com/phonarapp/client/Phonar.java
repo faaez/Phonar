@@ -19,7 +19,6 @@ public class Phonar extends Activity {
 		final Context context = this;
 		Button registerButton = (Button) findViewById(R.id.register_button);
 		registerButton.setOnClickListener(new View.OnClickListener() {
-			@Override
 			public void onClick(View v) {
 				Intent registrationIntent = new Intent(
 						"com.google.android.c2dm.intent.REGISTER");
@@ -32,7 +31,6 @@ public class Phonar extends Activity {
 		});
 		Button unregisterButton = (Button) findViewById(R.id.unregister_button);
 		unregisterButton.setOnClickListener(new View.OnClickListener() {
-			@Override
 			public void onClick(View v) {
 				Intent unregIntent =
 						new Intent("com.google.android.c2dm.intent.UNREGISTER");
