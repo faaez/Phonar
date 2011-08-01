@@ -20,24 +20,31 @@ import android.widget.Button;
 import android.widget.EditText;
 
 public class Phonar extends Activity {
+	/** Prompted only on first run to allow user to input phone number */
 	private EditText mUserNumberEditText;
+	/** Temporary solution until we integrate with contacts */
 	private EditText mTargetNumber;
 
+	/** POIs */
+	private HashMap<String, Person> people;
+
+	/** OnClickListener for dialog asking user to input their number */
 	private final OnClickListener mSaveClickListener = new OnClickListener() {
 		public void onClick(DialogInterface dialog, int which) {
 			// must be positive button; nothing else yet. also no error check
 			setUserNumber(mUserNumberEditText.getText().toString());
 		}
 	};
+	/** OnClickListener for dialog asking user who they want to bronar */
 	private final OnClickListener mBronarClickListener = new OnClickListener() {
 		public void onClick(DialogInterface dialog, int which) {
 			// TODO: asynctask
 			try {
 				// TODO: this is magical. should be device number
 				String url = PhonarApplication.LOCATION_REQUEST_URL
-					+ PhonarApplication.MY_NUMBER_PARAM + "="
+					+ C2DMReceiver.KEY_ORIGINATOR + "="
 					+ C2DMReceiver.getNumber(Phonar.this)
-					+ "&" + PhonarApplication.TARGET_NUMBER_PARAM + "="
+					+ "&" + C2DMReceiver.KEY_TARGET + "="
 					+ mTargetNumber.getText().toString();
 				new DefaultHttpClient().execute(new HttpGet(url));
 			} catch (Exception e) {
@@ -46,45 +53,12 @@ public class Phonar extends Activity {
 		}
 	};
 
+	// Dialog codes
 	private static final int DIALOG_ENTER_USER_NUMBER_ID = 0;
 	private static final int DIALOG_ENTER_EXTERNAL_NUMBER_ID = 1;
+
+	/** key to SharedPreferences for the number this device's number */
 	public static final String KEY_USER_NUMBER = "userNumber";
-
-	@Override
-	protected Dialog onCreateDialog(int id) {
-	    Dialog dialog;
-	    switch(id) {
-	    case DIALOG_ENTER_USER_NUMBER_ID:
-	    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
-	    	mUserNumberEditText = new EditText(this);
-	        builder.setPositiveButton("SAVE!", mSaveClickListener)
-	        		.setView(mUserNumberEditText);
-	        dialog = builder.create();
-	        break;
-	    case DIALOG_ENTER_EXTERNAL_NUMBER_ID:
-	    	AlertDialog.Builder externalBuilder = new AlertDialog.Builder(this);
-	    	mTargetNumber = new EditText(this);
-	    	externalBuilder.setPositiveButton("BRONAR!", mBronarClickListener)
-	        		.setView(mTargetNumber);
-	        dialog = externalBuilder.create();
-	    	break;
-	    default:
-	        dialog = null;
-	    }
-	    return dialog;
-	}
-
-	/**
-	 * Given a 10-digit number (no hyphens, etc), sets the number of the owner
-	 * of this app.
-	 */
-	public void setUserNumber(String number) {
-		getSharedPreferences("default", Context.MODE_PRIVATE).edit()
-				.putString(KEY_USER_NUMBER, number).commit();
-	}
-
-	//POIs
-	private HashMap<String, Person> people;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -147,6 +121,39 @@ public class Phonar extends Activity {
                 Phonar.this.startActivity(mapIntent);
             }
         });
+	}
+
+	@Override
+	protected Dialog onCreateDialog(int id) {
+	    Dialog dialog;
+	    switch(id) {
+	    case DIALOG_ENTER_USER_NUMBER_ID:
+	    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
+	    	mUserNumberEditText = new EditText(this);
+	        builder.setPositiveButton("SAVE!", mSaveClickListener)
+	        		.setView(mUserNumberEditText);
+	        dialog = builder.create();
+	        break;
+	    case DIALOG_ENTER_EXTERNAL_NUMBER_ID:
+	    	AlertDialog.Builder externalBuilder = new AlertDialog.Builder(this);
+	    	mTargetNumber = new EditText(this);
+	    	externalBuilder.setPositiveButton("BRONAR!", mBronarClickListener)
+	        		.setView(mTargetNumber);
+	        dialog = externalBuilder.create();
+	    	break;
+	    default:
+	        dialog = null;
+	    }
+	    return dialog;
+	}
+
+	/**
+	 * Given a 10-digit number (no hyphens, etc), sets the number of the owner
+	 * of this app.
+	 */
+	public void setUserNumber(String number) {
+		getSharedPreferences("default", Context.MODE_PRIVATE).edit()
+				.putString(KEY_USER_NUMBER, number).commit();
 	}
 
 	public static HashMap<String, Person> getPeopleForDebugging() {

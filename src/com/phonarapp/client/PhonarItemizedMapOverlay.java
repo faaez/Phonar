@@ -9,7 +9,7 @@ import com.google.android.maps.OverlayItem;
 
 public class PhonarItemizedMapOverlay extends ItemizedOverlay {
 
-	private ArrayList<OverlayItem> mOverlays = new ArrayList<OverlayItem>();
+	private final ArrayList<OverlayItem> mOverlays = new ArrayList<OverlayItem>();
 	public PhonarItemizedMapOverlay(Drawable defaultMarker) {
 		super(boundCenterBottom(defaultMarker));
 	}
@@ -23,8 +23,8 @@ public class PhonarItemizedMapOverlay extends ItemizedOverlay {
 	public int size() {
 		return mOverlays.size();
 	}
-	
-	/*
+
+	/**
 	 * Add overlay to the list
 	 */
 	public void addOverlay(OverlayItem overlay) {

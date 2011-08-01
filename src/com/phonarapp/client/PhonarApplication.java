@@ -31,10 +31,6 @@ public class PhonarApplication extends Application {
 	public static final String LOCATION_REPORT_URL =
 			"http://phonarapp.appspot.com/locationreport?";
 
-	/** key for my number */
-	public static String MY_NUMBER_PARAM = "number";
-	/** key for my target */
-	public static String TARGET_NUMBER_PARAM = "target";
 	/** key for registrationId from Google that app must send to server */
 	public static String REGISTRATION_ID_PARAM = "registrationId";
 

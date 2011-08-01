@@ -15,10 +15,17 @@ import android.util.Log;
 
 /**
  * Receives both registration information and messages from our server.
+ * TODO: this is very bad code. The broadcastreceiver shouldn't actually be
+ * processing this stuff so much: it should delegate it to a service or
+ * something.
  */
 public class C2DMReceiver extends BroadcastReceiver {
+	private String mExternalNumber;
+	private String mMyNumber;
+	private LocationManager mLocationManager = null;
+
 	// keys for items in the intent returned by Google servers
-	private static final String GOOGLE_REGISTRATION_ID_KEY = "registration_id";
+	private static final String GOOGLE_REGISTRATION_ID = "registration_id";
 	private static final String GOOGLE_REGISTRATION_ERROR = "error";
 	private static final String GOOGLE_REGISTRATION_UNREGISTERED
 			= "unregistered";
@@ -29,33 +36,32 @@ public class C2DMReceiver extends BroadcastReceiver {
 	private static final String TYPE_PROVIDING_LOCATION = "result";
 	private static final String TYPE_REQUESTING_LOCATION = "request";
 
-	// keys for items in intent of TYPE_REQUESTING_LOCATION
-	private static final String STALKER_NUMBER = "number";
+	// keys for items to send to and receive from server
+	/** Number of the person that is Phonaring another*/
+	public static final String KEY_ORIGINATOR = "number";
+	/** The bro being phonar'd */
+	public static final String KEY_TARGET = "target";
+	public static final String KEY_LONGITUDE = "longitude";
+	public static final String KEY_LATITUDE = "latitude";
+	public static final String KEY_ALTITUDE = "altitude";
 
-	// keys for items in intent of TYPE_PROVIDING_LOCATION
-	private static final String TARGET_NUMBER = "target";
-	private static final String STALKEE_NUMBER = "number";
-	private static final String STALKEE_LONGITUDE = "longitude";
-	private static final String STALKEE_LATITUDE = "latitude";
-	private static final String STALKEE_ALTITUDE = "altitude";
-
-	private String mExternalNumber;
-	private String mMyNumber;
-	private LocationManager mLocationManager = null;
-
+	/**
+	 * Receives location updates from the GPS. With each each message received,
+	 * creates a new thread to send the info out. Currently only sends one
+	 * and then immediately removes itself as a listener.
+	 * TODO: thread
+	 */
 	private final LocationListener mLocationListener = new LocationListener() {
 		public void onLocationChanged(Location location) {
-		    Log.d(PhonarApplication.TAG, "latitude: " + location.getLatitude());
-		    // TODO: might want to do this in another thread
 		    try {
 		    	Log.d(PhonarApplication.TAG, "number: " + mExternalNumber);
 		    	Log.d(PhonarApplication.TAG, "target: " + mMyNumber);
 				String url = PhonarApplication.LOCATION_REPORT_URL
-					+ STALKEE_NUMBER + "=" + mExternalNumber + "&"
-					+ TARGET_NUMBER + "=" + mMyNumber + "&"
-					+ STALKEE_LONGITUDE + "=" + location.getLongitude() + "&"
-					+ STALKEE_LATITUDE + "=" + location.getLatitude() + "&"
-					+ STALKEE_ALTITUDE + "=" + location.getAltitude();
+					+ KEY_ORIGINATOR + "=" + mExternalNumber + "&"
+					+ KEY_TARGET + "=" + mMyNumber + "&"
+					+ KEY_LONGITUDE + "=" + location.getLongitude() + "&"
+					+ KEY_LATITUDE + "=" + location.getLatitude() + "&"
+					+ KEY_ALTITUDE + "=" + location.getAltitude();
 				new DefaultHttpClient().execute(new HttpGet(url));
 			} catch (Exception e) {
 				Log.e(PhonarApplication.TAG, "Network exception: " + e);
@@ -78,15 +84,12 @@ public class C2DMReceiver extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		Log.d(PhonarApplication.TAG, "receiving something...");
 		mMyNumber = getNumber(context);
 		if (intent.getAction().equals(
 				"com.google.android.c2dm.intent.REGISTRATION")) {
-			Log.d(PhonarApplication.TAG, "registration");
 			handleRegistration(context, intent);
 		} else if (intent.getAction().equals(
 				"com.google.android.c2dm.intent.RECEIVE")) {
-			Log.d(PhonarApplication.TAG, "about to handle message that came");
 			handleMessage(context, intent);
 		}
 		Log.d(PhonarApplication.TAG, "nothing...");
@@ -100,13 +103,13 @@ public class C2DMReceiver extends BroadcastReceiver {
 	private void handleMessage(final Context context, Intent intent) {
 		String type = intent.getStringExtra(TYPE);
 		if (TYPE_PROVIDING_LOCATION.equals(type)) {
-			// blah
+			// use the info for something
 			Log.d(PhonarApplication.TAG,
-					intent.getStringExtra(STALKEE_LATITUDE));
+					intent.getStringExtra(KEY_LATITUDE));
 		} else if (TYPE_REQUESTING_LOCATION.equals(type)){
 			// Ask user if they want to share with this person and share if so.
 
-			final String number = intent.getStringExtra(STALKEE_NUMBER);
+			final String number = intent.getStringExtra(KEY_ORIGINATOR);
 			Log.d(PhonarApplication.TAG,
 					"extracted number in type_request_location: " + number);
 
@@ -118,14 +121,9 @@ public class C2DMReceiver extends BroadcastReceiver {
 			mLocationManager.requestLocationUpdates(
 					LocationManager.GPS_PROVIDER, 2000L, 0.01F, mLocationListener);
 		} else {
-			Log.e(PhonarApplication.TAG, "Message came back null. Did we give"
-					+ "it the right name?");
+			Log.e(PhonarApplication.TAG, "handleMessage has intent of "
+					+ "unknown type.");
 		}
-	}
-
-	public static String getNumber(Context context) {
-		return context.getSharedPreferences("default", Context.MODE_PRIVATE)
-				.getString(Phonar.KEY_USER_NUMBER, null);
 	}
 
 	/**
@@ -135,7 +133,7 @@ public class C2DMReceiver extends BroadcastReceiver {
 	 */
 	private void handleRegistration(final Context context, Intent intent) {
 		String registration =
-				intent.getStringExtra(GOOGLE_REGISTRATION_ID_KEY);
+				intent.getStringExtra(GOOGLE_REGISTRATION_ID);
 		if (intent.getStringExtra(GOOGLE_REGISTRATION_ERROR) != null) {
 			// Registration failed, should try again later.
 		} else if (intent.getStringExtra(GOOGLE_REGISTRATION_UNREGISTERED)
@@ -147,10 +145,8 @@ public class C2DMReceiver extends BroadcastReceiver {
 				@Override
 				protected Void doInBackground(String... registration) {
 					try {
-						// TODO: this is magical. should be device number
 						String url = PhonarApplication.REGISTRATION_URL
-							+ PhonarApplication.MY_NUMBER_PARAM + "="
-							+ mMyNumber
+							+ KEY_ORIGINATOR + "=" + mMyNumber
 							+ "&" + PhonarApplication.REGISTRATION_ID_PARAM
 							+ "=" + registration[0];
 						new DefaultHttpClient().execute(new HttpGet(url));
@@ -161,5 +157,11 @@ public class C2DMReceiver extends BroadcastReceiver {
 				}
 			}.execute(registration);
 		}
+	}
+
+	/** Returns this device's number as entered by the user */
+	public static String getNumber(Context context) {
+		return context.getSharedPreferences("default", Context.MODE_PRIVATE)
+				.getString(Phonar.KEY_USER_NUMBER, null);
 	}
 }
