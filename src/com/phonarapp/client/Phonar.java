@@ -42,9 +42,9 @@ public class Phonar extends Activity {
 			try {
 				// TODO: this is magical. should be device number
 				String url = PhonarApplication.LOCATION_REQUEST_URL
-					+ C2DMReceiver.KEY_ORIGINATOR + "="
-					+ C2DMReceiver.getNumber(Phonar.this)
-					+ "&" + C2DMReceiver.KEY_TARGET + "="
+					+ MessageService.KEY_ORIGINATOR + "="
+					+ MessageService.getNumber(Phonar.this)
+					+ "&" + MessageService.KEY_TARGET + "="
 					+ mTargetNumber.getText().toString();
 				new DefaultHttpClient().execute(new HttpGet(url));
 			} catch (Exception e) {
