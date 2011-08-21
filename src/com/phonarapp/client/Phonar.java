@@ -45,17 +45,17 @@ public class Phonar extends Activity {
 					mUserNumberEditText.getText().toString()));
 		}
 	};
+
 	/** OnClickListener for dialog asking user who they want to bronar */
 	private final OnClickListener mBronarClickListener = new OnClickListener() {
 		public void onClick(DialogInterface dialog, int which) {
 			// TODO: asynctask
 			try {
-				// TODO: this is magical. should be device number
 				String url = PhonarApplication.LOCATION_REQUEST_URL
-				+ C2DMReceiver.KEY_ORIGINATOR + "="
-				+ C2DMReceiver.getNumber(Phonar.this)
-				+ "&" + C2DMReceiver.KEY_TARGET + "="
-				+ mTargetNumber.getText().toString();
+					+ LocationHandler.KEY_ORIGINATOR + "="
+					+ MessageService.getNumber(Phonar.this)
+					+ "&" + LocationHandler.KEY_TARGET + "="
+					+ mTargetNumber.getText().toString();
 				new DefaultHttpClient().execute(new HttpGet(url));
 			} catch (Exception e) {
 				Log.e(PhonarApplication.TAG, "Network exception: " + e);
