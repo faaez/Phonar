@@ -34,4 +34,10 @@
         android:layout_height="wrap_content"
         android:text="@string/map_name"
     />
+    <Button
+        android:id="@+id/contacts_button"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/contacts_name"
+    />
 </LinearLayout>

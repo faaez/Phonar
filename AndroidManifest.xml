@@ -16,6 +16,8 @@
 	
 	<!-- Give someone your location -->
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+	
+	<uses-permission android:name="android.permission.READ_CONTACTS"/>
 
 	<application android:name=".PhonarApplication" android:icon="@drawable/icon"
 	       android:label="@string/app_name">

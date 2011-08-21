@@ -8,4 +8,5 @@
     <string name="phonar">phonar someone :O</string>
     <string name="poll">poll</string>
     <string name="map_name">View Friends on Map</string>
+    <string name="contacts_name">Choose a contact to Phonar</string>
 </resources>
