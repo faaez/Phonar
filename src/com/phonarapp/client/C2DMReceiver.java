@@ -13,9 +13,10 @@ import android.os.Bundle;
 public class C2DMReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		Bundle bundle = intent.getExtras();
+		Bundle extras = intent.getExtras();
 		Intent serviceIntent = new Intent(context, MessageService.class);
-		serviceIntent.putExtra(MessageService.KEY_EXTRAS_BUNDLE, bundle);
+		serviceIntent.putExtra(MessageService.KEY_EXTRAS, extras);
+		serviceIntent.putExtra(MessageService.KEY_ACTION, intent.getAction());
 		context.startService(serviceIntent);
 	}
 }
