@@ -49,19 +49,22 @@ public class Phonar extends Activity {
 	/** OnClickListener for dialog asking user who they want to bronar */
 	private final OnClickListener mBronarClickListener = new OnClickListener() {
 		public void onClick(DialogInterface dialog, int which) {
-			// TODO: asynctask
-			try {
-				String url = PhonarApplication.LOCATION_REQUEST_URL
-					+ LocationHandler.KEY_ORIGINATOR + "="
-					+ MessageService.getNumber(Phonar.this)
-					+ "&" + LocationHandler.KEY_TARGET + "="
-					+ mTargetNumber.getText().toString();
-				new DefaultHttpClient().execute(new HttpGet(url));
-			} catch (Exception e) {
-				Log.e(PhonarApplication.TAG, "Network exception: " + e);
-			}
+			startPhonarRequest(mTargetNumber.getText().toString());
 		}
 	};
+
+	private void startPhonarRequest(String targetNumberString) {
+		try {
+			String url = PhonarApplication.LOCATION_REQUEST_URL
+				+ LocationHandler.KEY_ORIGINATOR + "="
+				+ MessageService.getNumber(Phonar.this)
+				+ "&" + LocationHandler.KEY_TARGET + "="
+				+ targetNumberString;
+			new DefaultHttpClient().execute(new HttpGet(url));
+		} catch (Exception e) {
+			Log.e(PhonarApplication.TAG, "Network exception: " + e);
+		}
+	}
 
 	// Dialog codes
 	private static final int DIALOG_ENTER_USER_NUMBER_ID = 0;
@@ -174,11 +177,6 @@ public class Phonar extends Activity {
 		.putString(KEY_USER_NUMBER, number).commit();
 	}
 
-	public String getUserNumber() {
-		return getSharedPreferences("default", Context.MODE_PRIVATE)
-			.getString(KEY_USER_NUMBER, "");
-	}
-
 	public static HashMap<String, Person> getPeopleForDebugging() {
 		HashMap<String, Person> people = new HashMap<String, Person>();
 		Person person = new Person("12", "Clem", 37.7793, -122.4192, 36);
@@ -223,6 +221,7 @@ public class Phonar extends Activity {
 					 String number = cursor.getString(
 							 cursor.getColumnIndexOrThrow(People.NUMBER));
 					 Log.i(TAG, name + " " + standardizePhoneNumber(number));
+					 startPhonarRequest(standardizePhoneNumber(number));
 				}
 
 			}
@@ -243,7 +242,7 @@ public class Phonar extends Activity {
 				return result.substring(1);
 			} else if (result.length() == 7) {
 				return String.format("%s%s",
-						getUserNumber().substring(0, 3), result);
+						MessageService.getNumber(this).substring(0, 3), result);
 			} else {
 				return "bad number";
 			}
