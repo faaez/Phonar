@@ -173,7 +173,7 @@ public class Phonar extends Activity {
 		getSharedPreferences("default", Context.MODE_PRIVATE).edit()
 		.putString(KEY_USER_NUMBER, number).commit();
 	}
-	
+
 	public String getUserNumber() {
 		return getSharedPreferences("default", Context.MODE_PRIVATE)
 			.getString(KEY_USER_NUMBER, "");
@@ -201,11 +201,11 @@ public class Phonar extends Activity {
 		return people;
 	}
 
-	public void doLaunchContactPicker() {  
-		Intent contactPickerIntent = new Intent(Intent.ACTION_PICK,  
-				Contacts.Phones.CONTENT_URI);  
-		startActivityForResult(contactPickerIntent, PICK_CONTACT);  
-	}  
+	public void doLaunchContactPicker() {
+		Intent contactPickerIntent = new Intent(Intent.ACTION_PICK,
+				Contacts.Phones.CONTENT_URI);
+		startActivityForResult(contactPickerIntent, PICK_CONTACT);
+	}
 
 	@Override
 	public void onActivityResult(int reqCode, int resultCode, Intent data) {
@@ -221,7 +221,7 @@ public class Phonar extends Activity {
 					String name = cursor.getString(
 							cursor.getColumnIndexOrThrow(People.NAME));
 					 String number = cursor.getString(
-							 cursor.getColumnIndexOrThrow(People.NUMBER)); 
+							 cursor.getColumnIndexOrThrow(People.NUMBER));
 					 Log.i(TAG, name + " " + standardizePhoneNumber(number));
 				}
 
@@ -229,7 +229,7 @@ public class Phonar extends Activity {
 		break;
 		}
 	}
-	
+
 	public String standardizePhoneNumber(String number) {
 		StringBuilder builder = new StringBuilder();
 		for (Character c : number.toCharArray()) {
@@ -242,7 +242,7 @@ public class Phonar extends Activity {
 			if (result.length() == 11 && result.charAt(0) == '1') {
 				return result.substring(1);
 			} else if (result.length() == 7) {
-				return String.format("%s%s", 
+				return String.format("%s%s",
 						getUserNumber().substring(0, 3), result);
 			} else {
 				return "bad number";
