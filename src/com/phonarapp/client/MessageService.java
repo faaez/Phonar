@@ -115,7 +115,7 @@ public class MessageService extends Service {
 			builder.setPositiveButton("Yes", mShareLocationListener)
 			.setNegativeButton("No", mEmptyListener)
 			.setTitle("Share your location with " + number + " ?");
-			builder.create();
+			builder.create().show();
 
 	
 			Log.d(PhonarApplication.TAG,
