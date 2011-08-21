@@ -3,8 +3,11 @@ package com.phonarapp.client;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import android.app.AlertDialog;
 import android.app.Service;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.location.LocationManager;
 import android.os.AsyncTask;
@@ -47,6 +50,25 @@ public class MessageService extends Service {
 	// the possible results from type
 	private static final String TYPE_PROVIDING_LOCATION = "result";
 	private static final String TYPE_REQUESTING_LOCATION = "request";
+	
+	private String number;
+	private Context context;
+	
+	/** OnClickListener for comfirming location sharing */
+	private final OnClickListener mShareLocationListener = new OnClickListener() {
+		public void onClick(DialogInterface dialog, int which) {
+			LocationManager lm = (LocationManager) context.getSystemService(
+					Context.LOCATION_SERVICE);
+			lm.requestLocationUpdates(
+					LocationManager.GPS_PROVIDER, 2000L, 0.01F,
+					new LocationHandler(context, number));
+		}
+	};
+	
+	private final OnClickListener mEmptyListener = new OnClickListener() {
+		public void onClick(DialogInterface dialog, int which) {
+		}
+	};
 
 	/**
 	 * Handles the intent passed to startService() (see
@@ -78,25 +100,26 @@ public class MessageService extends Service {
 	 */
 	private void handleMessage(final Context context, Bundle extras) {
 		String type = extras.getString(TYPE);
+		this.context = context;
 		if (TYPE_PROVIDING_LOCATION.equals(type)) {
 			// use the info for something
 			Log.d(PhonarApplication.TAG,
 					extras.getString(LocationHandler.KEY_LATITUDE));
 		} else if (TYPE_REQUESTING_LOCATION.equals(type)){
 			// Ask user if they want to share with this person and share if so.
-
-			final String number = extras.getString(
+			
+			number = extras.getString(
 					LocationHandler.KEY_ORIGINATOR);
+			
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setPositiveButton("Yes", mShareLocationListener)
+			.setNegativeButton("No", mEmptyListener)
+			.setTitle("Share your location with " + number + " ?");
+			builder.create();
+
+	
 			Log.d(PhonarApplication.TAG,
 					"extracted number in type_request_location: " + number);
-
-			// use contacts to find the name of the person with the #
-
-			LocationManager lm = (LocationManager) context.getSystemService(
-					Context.LOCATION_SERVICE);
-			lm.requestLocationUpdates(
-					LocationManager.GPS_PROVIDER, 2000L, 0.01F,
-					new LocationHandler(context, number));
 		} else {
 			Log.e(PhonarApplication.TAG, "handleMessage was passed an intent"
 					+ " of unknown type.");
