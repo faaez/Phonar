@@ -1,11 +1,6 @@
 bin/
 gen/
 .DS_Store
-<<<<<<< HEAD
 .classpath
 default.properties
 .project
-=======
-
-.DS_Store
->>>>>>> changing .gitignore to include ds_store
