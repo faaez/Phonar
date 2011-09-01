@@ -16,7 +16,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Contacts;
+import android.provider.Contacts.Phones;
 import android.provider.Contacts.People;
 import android.util.Log;
 import android.view.View;
@@ -117,8 +117,11 @@ public class Phonar extends Activity {
 		Button arButton = (Button) findViewById(R.id.ar_button);
 		arButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				Intent arIntent = new Intent(context, ArActivity.class);
-				Phonar.this.startActivity(arIntent);
+				Intent i = new Intent(); 
+				i.setAction(Intent.ACTION_VIEW); 
+				i.setDataAndType(Uri.parse("http://bango29.com/mix.php"), 
+				"application/mixare-json"); 
+				startActivity(i); 
 			}
 		});
 
@@ -202,7 +205,7 @@ public class Phonar extends Activity {
 
 	public void doLaunchContactPicker() {
 		Intent contactPickerIntent = new Intent(Intent.ACTION_PICK,
-				Contacts.Phones.CONTENT_URI);
+				Phones.CONTENT_URI);
 		startActivityForResult(contactPickerIntent, PICK_CONTACT);
 	}
 
