@@ -149,7 +149,7 @@ public class Phonar extends Activity {
 				FileOutputStream fos = null;
 				File file = null;
 				try {
-					fos = openFileOutput(JSON_FILENAME, Context.MODE_PRIVATE);
+					fos = openFileOutput(JSON_FILENAME, Context.MODE_WORLD_READABLE);
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
 				}
