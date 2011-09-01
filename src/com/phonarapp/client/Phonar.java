@@ -1,9 +1,16 @@
 package com.phonarapp.client;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.HashMap;
 
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -27,6 +34,7 @@ import android.widget.Toast;
 public class Phonar extends Activity {
 
 	private static final int PICK_CONTACT = 1337;
+	private static final String JSON_FILENAME = "jsonfile";
 
 	private final static String TAG = "PhonarMain";
 
@@ -118,8 +126,40 @@ public class Phonar extends Activity {
 		arButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				Intent i = new Intent(); 
-				i.setAction(Intent.ACTION_VIEW); 
-				i.setDataAndType(Uri.parse("http://bango29.com/mix.php"), 
+				i.setAction(Intent.ACTION_VIEW);
+				JSONObject jsonPeople = new JSONObject();
+				JSONArray results = new JSONArray();
+				for (Person person : getPeopleForDebugging().values()) {
+					JSONObject jsonPerson = new JSONObject();
+					try {
+						jsonPerson.put("title", person.getName());
+						jsonPerson.put("lat", person.getLatitude());
+						jsonPerson.put("lng", person.getLongitude());
+						jsonPerson.put("elevation", person.getAltitude());
+					} catch (JSONException e) {
+					e.printStackTrace();
+					}
+					results.put(jsonPerson);
+				}
+				try {
+					jsonPeople.put("results", results);
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+				FileOutputStream fos = null;
+				File file = null;
+				try {
+					fos = openFileOutput(JSON_FILENAME, Context.MODE_PRIVATE);
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				}
+				try {
+					fos.write(jsonPeople.toString().getBytes());
+					file = new File(getFilesDir() + "/" + JSON_FILENAME);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				i.setDataAndType(Uri.fromFile(file), 
 				"application/mixare-json"); 
 				startActivity(i); 
 			}
