@@ -1,16 +1,9 @@
 package com.phonarapp.client;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.HashMap;
 
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -23,18 +16,16 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Contacts.Phones;
+import android.provider.Contacts;
 import android.provider.Contacts.People;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 public class Phonar extends Activity {
 
 	private static final int PICK_CONTACT = 1337;
-	private static final String JSON_FILENAME = "jsonfile";
 
 	private final static String TAG = "PhonarMain";
 
@@ -125,43 +116,8 @@ public class Phonar extends Activity {
 		Button arButton = (Button) findViewById(R.id.ar_button);
 		arButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				Intent i = new Intent(); 
-				i.setAction(Intent.ACTION_VIEW);
-				JSONObject jsonPeople = new JSONObject();
-				JSONArray results = new JSONArray();
-				for (Person person : getPeopleForDebugging().values()) {
-					JSONObject jsonPerson = new JSONObject();
-					try {
-						jsonPerson.put("title", person.getName());
-						jsonPerson.put("lat", person.getLatitude());
-						jsonPerson.put("lng", person.getLongitude());
-						jsonPerson.put("elevation", person.getAltitude());
-					} catch (JSONException e) {
-					e.printStackTrace();
-					}
-					results.put(jsonPerson);
-				}
-				try {
-					jsonPeople.put("results", results);
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
-				FileOutputStream fos = null;
-				File file = null;
-				try {
-					fos = openFileOutput(JSON_FILENAME, Context.MODE_WORLD_READABLE);
-				} catch (FileNotFoundException e) {
-					e.printStackTrace();
-				}
-				try {
-					fos.write(jsonPeople.toString().getBytes());
-					file = new File(getFilesDir() + "/" + JSON_FILENAME);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				i.setDataAndType(Uri.fromFile(file), 
-				"application/mixare-json"); 
-				startActivity(i); 
+				Intent arIntent = new Intent(context, ArActivity.class);
+				Phonar.this.startActivity(arIntent);
 			}
 		});
 
@@ -223,13 +179,13 @@ public class Phonar extends Activity {
 
 	public static HashMap<String, Person> getPeopleForDebugging() {
 		HashMap<String, Person> people = new HashMap<String, Person>();
-		Person person = new Person("12", "Clem", 33.716667, 73.366667, 1840);
+		Person person = new Person("12", "Clem", 37.7793, -122.4192, 36);
 		people.put("12", person);
-		person = new Person("34", "Jorge", 34.716667, 73.066667, 1840);
+		person = new Person("34", "Jorge", 36.683333, -122.766667, 36);
 		people.put("34", person);
-		person = new Person("56", "Jeff", 33.816667, 74.066667, 1860);
+		person = new Person("56", "Jeff", 37.683333, -124.766667, 36);
 		people.put("56", person);
-		person = new Person("78", "Faaez", 33.916667, 73.566667, 1870);
+		person = new Person("78", "Faaez", 38.683333, -121.766667, 36);
 		people.put("78", person);
 
 		return people;
@@ -245,7 +201,7 @@ public class Phonar extends Activity {
 
 	public void doLaunchContactPicker() {
 		Intent contactPickerIntent = new Intent(Intent.ACTION_PICK,
-				Phones.CONTENT_URI);
+				Contacts.Phones.CONTENT_URI);
 		startActivityForResult(contactPickerIntent, PICK_CONTACT);
 	}
 
@@ -294,6 +250,5 @@ public class Phonar extends Activity {
 			return result;
 		}
 	}
-	
 
 }
