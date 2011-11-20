@@ -1,5 +1,9 @@
 package com.phonarapp.client;
 
+import java.util.List;
+
+import org.openintents.intents.WikitudePOI;
+
 import android.app.Application;
 
 /**
@@ -11,11 +15,10 @@ import android.app.Application;
  * (2) Stores some global constants. If we isolate their usage to just one
  * primary activity, we should consider moving them there to minimize the
  * memory impact of the Application.
- * 
- * TODO: Now that wikitude has been phased out, we can safely move this stuff to 
- * a primary activity
  */
 public class PhonarApplication extends Application {
+	private List<WikitudePOI> pois;
+	/** debugging tag used throughout the application */
 	public static final String TAG = "phonar";
 
 	/** the URL for registering to our server */
@@ -31,5 +34,11 @@ public class PhonarApplication extends Application {
 	/** key for registrationId from Google that app must send to server */
 	public static String REGISTRATION_ID_PARAM = "registrationId";
 
-	
+	public void setPois(List<WikitudePOI> pois) {
+		this.pois = pois;
+	}
+
+	public List<WikitudePOI> getPois() {
+		return pois;
+	}
 }
