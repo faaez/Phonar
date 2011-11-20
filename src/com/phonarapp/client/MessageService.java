@@ -3,11 +3,11 @@ package com.phonarapp.client;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
-import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.location.LocationManager;
 import android.os.AsyncTask;
@@ -51,25 +51,6 @@ public class MessageService extends Service {
 	private static final String TYPE_PROVIDING_LOCATION = "result";
 	private static final String TYPE_REQUESTING_LOCATION = "request";
 	
-	private String number;
-	private Context context;
-	
-	/** OnClickListener for comfirming location sharing */
-	private final OnClickListener mShareLocationListener = new OnClickListener() {
-		public void onClick(DialogInterface dialog, int which) {
-			LocationManager lm = (LocationManager) context.getSystemService(
-					Context.LOCATION_SERVICE);
-			lm.requestLocationUpdates(
-					LocationManager.GPS_PROVIDER, 2000L, 0.01F,
-					new LocationHandler(context, number));
-		}
-	};
-	
-	private final OnClickListener mEmptyListener = new OnClickListener() {
-		public void onClick(DialogInterface dialog, int which) {
-		}
-	};
-
 	/**
 	 * Handles the intent passed to startService() (see
 	 * Service.onStartCommand() for more details).
@@ -100,7 +81,6 @@ public class MessageService extends Service {
 	 */
 	private void handleMessage(final Context context, Bundle extras) {
 		String type = extras.getString(TYPE);
-		this.context = context;
 		if (TYPE_PROVIDING_LOCATION.equals(type)) {
 			// use the info for something
 			Log.d(PhonarApplication.TAG,
@@ -108,16 +88,42 @@ public class MessageService extends Service {
 		} else if (TYPE_REQUESTING_LOCATION.equals(type)){
 			// Ask user if they want to share with this person and share if so.
 			
-			number = extras.getString(
+			final String number = extras.getString(
 					LocationHandler.KEY_ORIGINATOR);
 			
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setPositiveButton("Yes", mShareLocationListener)
-			.setNegativeButton("No", mEmptyListener)
-			.setTitle("Share your location with " + number + " ?");
-			builder.create().show();
+			LocationManager lm = (LocationManager) context.getSystemService(
+					Context.LOCATION_SERVICE);
+			lm.requestLocationUpdates(
+					LocationManager.GPS_PROVIDER, 2000L, 0.01F,
+					new LocationHandler(context, number));
+			
+			/* Sends a notification. */
+			//TODO: make notification trigger location sharing
+			String ns = Context.NOTIFICATION_SERVICE;
+			NotificationManager mNotificationManager 
+				= (NotificationManager) getSystemService(ns);
+			
+			int icon = R.drawable.phonar_app_icon_19;
+			CharSequence tickerText = number + " wants to Phonar you!";
+			long when = System.currentTimeMillis();
 
-	
+			Notification notification = new Notification(icon, tickerText, when);
+			
+			Context appContext = getApplicationContext();
+			CharSequence contentTitle = number + " wants to Phonar you!";
+			CharSequence contentText = "Accept by touching here";
+			Intent notificationIntent = new Intent(this, Phonar.class);
+			notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+					| Intent.FLAG_ACTIVITY_SINGLE_TOP);
+			notificationIntent.putExtra(LocationHandler.KEY_ORIGINATOR, number);
+			PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+
+			notification.setLatestEventInfo(appContext, contentTitle, contentText, contentIntent);
+
+			final int id = 1;
+
+			mNotificationManager.notify(id, notification);
+			
 			Log.d(PhonarApplication.TAG,
 					"extracted number in type_request_location: " + number);
 		} else {
