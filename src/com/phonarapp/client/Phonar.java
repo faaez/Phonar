@@ -23,13 +23,12 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Contacts.Phones;
 import android.provider.Contacts.People;
+import android.provider.Contacts.Phones;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 public class Phonar extends Activity {
 

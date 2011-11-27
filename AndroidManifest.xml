@@ -30,6 +30,7 @@
 		</activity>
 		<activity android:name=".ArActivity" />
 		<activity android:name=".PhonarMapActivity" />
+		<activity android:name=".RequestDialogActivity" />
 		
 		<!-- Services -->
 		<service android:name=".MessageService" />

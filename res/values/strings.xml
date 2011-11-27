@@ -11,4 +11,5 @@
     <string name="contacts_name">Choose a contact to Phonar</string>
     <string name="download_error">Download error</string>
     <string name="download_received">Download received</string>
+    <string name="accept">Accept</string>
 </resources>

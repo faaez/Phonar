@@ -51,6 +51,8 @@ public class MessageService extends Service {
 	private static final String TYPE_PROVIDING_LOCATION = "result";
 	private static final String TYPE_REQUESTING_LOCATION = "request";
 	
+	private NotificationManager notificationManager;
+	
 	/**
 	 * Handles the intent passed to startService() (see
 	 * Service.onStartCommand() for more details).
@@ -62,6 +64,8 @@ public class MessageService extends Service {
 	 */
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
+		String ns = Context.NOTIFICATION_SERVICE;
+		notificationManager = (NotificationManager) getSystemService(ns);
 		// If the process is killed and restarted, the intent may be null.
 		if (intent != null ) {
 			Context context = getBaseContext();
@@ -71,6 +75,8 @@ public class MessageService extends Service {
 				handleMessage(context, intent.getBundleExtra(KEY_EXTRAS));
 			}
 		}
+		
+
 		return START_STICKY;
 	}
 
@@ -82,37 +88,61 @@ public class MessageService extends Service {
 	private void handleMessage(final Context context, Bundle extras) {
 		String type = extras.getString(TYPE);
 		if (TYPE_PROVIDING_LOCATION.equals(type)) {
-			// use the info for something
-			Log.d(PhonarApplication.TAG,
-					extras.getString(LocationHandler.KEY_LATITUDE));
+			double latitude = Double.parseDouble(extras.getString(LocationHandler.KEY_LATITUDE));
+			double longitude = Double.parseDouble(extras.getString(LocationHandler.KEY_LONGITUDE));
+			String target = extras.getString(LocationHandler.KEY_TARGET);
+			
+			int icon = R.drawable.notification23;
+			CharSequence tickerText = target + " has accepted your request";
+			long when = System.currentTimeMillis();
+			
+			Notification notification = new Notification(icon, tickerText, when);
+			notification.flags |= Notification.FLAG_ONGOING_EVENT | Notification.FLAG_AUTO_CANCEL;
+			
+			Context appContext = getApplicationContext();
+			CharSequence contentTitle = target + " is sharing location";
+			CharSequence contentText = "Touch here to view";
+			Intent notificationIntent = new Intent(this, PhonarMapActivity.class);
+			notificationIntent.putExtra(LocationHandler.KEY_LATITUDE, latitude);
+			notificationIntent.putExtra(LocationHandler.KEY_LONGITUDE, longitude);
+
+			notificationIntent.putExtra(LocationHandler.KEY_TARGET, target);
+
+			
+						
+			notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+					| Intent.FLAG_ACTIVITY_SINGLE_TOP);
+			PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+
+			notification.setLatestEventInfo(appContext, contentTitle, contentText, contentIntent);
+
+			final int id = 1;
+
+			notificationManager.notify(id, notification);
+			
+			
 		} else if (TYPE_REQUESTING_LOCATION.equals(type)){
 			// Ask user if they want to share with this person and share if so.
 			
 			final String number = extras.getString(
 					LocationHandler.KEY_ORIGINATOR);
 			
-			LocationManager lm = (LocationManager) context.getSystemService(
-					Context.LOCATION_SERVICE);
-			lm.requestLocationUpdates(
-					LocationManager.GPS_PROVIDER, 2000L, 0.01F,
-					new LocationHandler(context, number));
-			
 			/* Sends a notification. */
 			//TODO: make notification trigger location sharing
-			String ns = Context.NOTIFICATION_SERVICE;
-			NotificationManager mNotificationManager 
-				= (NotificationManager) getSystemService(ns);
+
 			
-			int icon = R.drawable.phonar_app_icon_19;
+			int icon = R.drawable.notification23;
 			CharSequence tickerText = number + " wants to Phonar you!";
 			long when = System.currentTimeMillis();
 
 			Notification notification = new Notification(icon, tickerText, when);
+			notification.flags |= Notification.FLAG_ONGOING_EVENT | Notification.FLAG_AUTO_CANCEL;  
 			
 			Context appContext = getApplicationContext();
 			CharSequence contentTitle = number + " wants to Phonar you!";
 			CharSequence contentText = "Accept by touching here";
-			Intent notificationIntent = new Intent(this, Phonar.class);
+			Intent notificationIntent = new Intent(this, RequestDialogActivity.class);
+						
 			notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
 					| Intent.FLAG_ACTIVITY_SINGLE_TOP);
 			notificationIntent.putExtra(LocationHandler.KEY_ORIGINATOR, number);
@@ -122,7 +152,7 @@ public class MessageService extends Service {
 
 			final int id = 1;
 
-			mNotificationManager.notify(id, notification);
+			notificationManager.notify(id, notification);
 			
 			Log.d(PhonarApplication.TAG,
 					"extracted number in type_request_location: " + number);
