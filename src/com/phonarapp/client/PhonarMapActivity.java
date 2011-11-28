@@ -37,7 +37,7 @@ public class PhonarMapActivity extends MapActivity {
 	private void addPeopleToMap() {
 		mapOverlays = mapView.getOverlays();
 		drawable = this.getResources().getDrawable(R.drawable.androidmarker);
-		itemizedOverlay = new PhonarItemizedMapOverlay(drawable);
+		itemizedOverlay = new PhonarItemizedMapOverlay(drawable, this.getBaseContext());
 
 		Bundle bundle = getIntent().getExtras();
 		double latitude = bundle.getDouble(LocationHandler.KEY_LATITUDE);
@@ -45,10 +45,10 @@ public class PhonarMapActivity extends MapActivity {
 		String target = bundle.getString(LocationHandler.KEY_TARGET);
 
 		GeoPoint point = new GeoPoint((int)(latitude * 1E6), (int)(longitude * 1E6));
-		OverlayItem overlayitem = new OverlayItem(point, target, target);
-		itemizedOverlay.addOverlay(overlayitem);
+		OverlayItem overlayItem = new OverlayItem(point, target, target);
+		itemizedOverlay.addOverlay(overlayItem);
 		mapOverlays.add(itemizedOverlay);
-		//mapView.invalidate();
+		mapView.invalidate();
 	}
 	
 
