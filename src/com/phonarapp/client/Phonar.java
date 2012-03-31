@@ -18,7 +18,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Contacts;
 import android.provider.Contacts.People;
-import android.provider.Contacts.Phones;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
