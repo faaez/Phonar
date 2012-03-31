@@ -121,6 +121,14 @@ public class Phonar extends Activity {
 			}
 		});
 
+		Button testArButton = (Button) findViewById(R.id.test_ar);
+		testArButton.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				Intent arIntent = new Intent(context, ARTest.class);
+				Phonar.this.startActivity(arIntent);
+			}
+		});
+		
 		Button contactsButton = (Button) findViewById(R.id.contacts_button);
 		contactsButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
