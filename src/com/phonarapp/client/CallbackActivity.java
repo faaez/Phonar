@@ -10,6 +10,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Pair;
 
 /**
  * basic callback-activity
@@ -22,7 +23,7 @@ public class CallbackActivity extends Activity {
 	private static final int POI_CLICKED_DIALOG = 1;
 	private static final int NOTHING_SELECTED_DIALOG = 2;
 	private int poiId;
-	private List<WikitudePOI> pois;
+	private List<Pair<Double, Double>> pois;
 
 	/**
 	 * {@inheritDoc}
@@ -32,8 +33,8 @@ public class CallbackActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		this.setContentView(R.layout.callback_layout);
 		pois = ((PhonarApplication) this.getApplication()).getPois();
-		poiId = this.getIntent().getIntExtra(
-				WikitudeARIntentHelper.EXTRA_INDEX_SELECTED_POI, -1);
+//		poiId = this.getIntent().getIntExtra(
+//				WikitudeARIntentHelper.EXTRA_INDEX_SELECTED_POI, -1);
 
 		if (pois != null && poiId != -1) {
 			this.showDialog(CallbackActivity.POI_CLICKED_DIALOG);
@@ -51,7 +52,7 @@ public class CallbackActivity extends Activity {
 		case CallbackActivity.POI_CLICKED_DIALOG:
 			String title = "";
 			if (poiId != -1 && pois != null) {
-				title = pois.get(poiId).getName();
+				title = pois.get(poiId);
 			}
 			return new AlertDialog.Builder(this).setMessage("My new Intent!")
 					.setTitle("Coming from Wikitude, " + title + " clicked")

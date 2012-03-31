@@ -2,9 +2,10 @@ package com.phonarapp.client;
 
 import java.util.List;
 
-import org.openintents.intents.WikitudePOI;
+//import org.openintents.intents.WikitudePOI;
 
 import android.app.Application;
+import android.util.Pair;
 
 /**
  * This Application serves two purposes:
@@ -17,7 +18,7 @@ import android.app.Application;
  * memory impact of the Application.
  */
 public class PhonarApplication extends Application {
-	private List<WikitudePOI> pois;
+	private List<Pair<Double, Double>> pois;
 	/** debugging tag used throughout the application */
 	public static final String TAG = "phonar";
 
@@ -34,11 +35,11 @@ public class PhonarApplication extends Application {
 	/** key for registrationId from Google that app must send to server */
 	public static String REGISTRATION_ID_PARAM = "registrationId";
 
-	public void setPois(List<WikitudePOI> pois) {
+	public void setPois(List<Pair<Double, Double>> pois) {
 		this.pois = pois;
 	}
 
-	public List<WikitudePOI> getPois() {
+	public List<Pair<Double, Double>> getPois() {
 		return pois;
 	}
 }

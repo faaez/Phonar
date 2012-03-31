@@ -3,10 +3,6 @@ package com.phonarapp.client;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.openintents.intents.AbstractWikitudeARIntent;
-import org.openintents.intents.WikitudeARIntent;
-import org.openintents.intents.WikitudePOI;
-
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.os.Bundle;
@@ -29,47 +25,47 @@ public class ArActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.arview);
-		startArView();
+//		startArView();
 	}
 
 	/**
 	 * Start running augmented reality view
 	 */
-	private void startArView() {
-		WikitudeARIntent intent = prepareIntent();
-		try {
-			intent.startIntent(this);
-		} catch (ActivityNotFoundException e) {
-			AbstractWikitudeARIntent.handleWikitudeNotFound(this);
-		}
-	}
+//	private void startArView() {
+//		WikitudeARIntent intent = prepareIntent();
+//		try {
+//			intent.startIntent(this);
+//		} catch (ActivityNotFoundException e) {
+//			AbstractWikitudeARIntent.handleWikitudeNotFound(this);
+//		}
+//	}
 
 	/**
 	 * Prepares wikitude AR intent.
 	 */
-	private WikitudeARIntent prepareIntent() {
-		WikitudeARIntent intent = new WikitudeARIntent(this.getApplication(),
-				API_KEY, DEVELOPER_NAME);
-		addPois(intent);
-		return intent;
-	}
+//	private WikitudeARIntent prepareIntent() {
+//		WikitudeARIntent intent = new WikitudeARIntent(this.getApplication(),
+//				API_KEY, DEVELOPER_NAME);
+//		addPois(intent);
+//		return intent;
+//	}
 
 	/**
 	 * Add POIs to intent.
 	 */
-	private void addPois(WikitudeARIntent intent) {
-		List<WikitudePOI> pois = new ArrayList<WikitudePOI>();
-		for (Person person : Phonar.getPeopleForDebugging().values()) {
-			WikitudePOI poi = new WikitudePOI(person.getLatitude(), person.getLongitude(), person.getAltitude(), person.getName(), person.getPhoneNumber());
-			poi.setDetailAction(ArActivity.CALLBACK_INTENT);
-			pois.add(poi);
-		}
-		
-        intent.addPOIs(pois);
-        
-        ((PhonarApplication)this.getApplication()).setPois(pois);
-
-        //do something with application
-	}
+//	private void addPois(WikitudeARIntent intent) {
+//		List<WikitudePOI> pois = new ArrayList<WikitudePOI>();
+//		for (Person person : Phonar.getPeopleForDebugging().values()) {
+//			WikitudePOI poi = new WikitudePOI(person.getLatitude(), person.getLongitude(), person.getAltitude(), person.getName(), person.getPhoneNumber());
+//			poi.setDetailAction(ArActivity.CALLBACK_INTENT);
+//			pois.add(poi);
+//		}
+//		
+//        intent.addPOIs(pois);
+//        
+//        ((PhonarApplication)this.getApplication()).setPois(pois);
+//
+//        //do something with application
+//	}
 
 }
