@@ -2,9 +2,6 @@ package com.phonarapp.client;
 
 import java.util.List;
 
-import org.openintents.intents.WikitudeARIntentHelper;
-import org.openintents.intents.WikitudePOI;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -52,7 +49,7 @@ public class CallbackActivity extends Activity {
 		case CallbackActivity.POI_CLICKED_DIALOG:
 			String title = "";
 			if (poiId != -1 && pois != null) {
-				title = pois.get(poiId);
+				//title = pois.get(poiId);
 			}
 			return new AlertDialog.Builder(this).setMessage("My new Intent!")
 					.setTitle("Coming from Wikitude, " + title + " clicked")
