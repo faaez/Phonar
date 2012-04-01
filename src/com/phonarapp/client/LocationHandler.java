@@ -38,7 +38,33 @@ class LocationHandler implements LocationListener {
 
 	public void onLocationChanged(Location location) {
 		Log.d("phonar", "location changed");
-	    try {
+		if (location.getAccuracy() < 30F) {
+		    try { 
+		    	Log.d(PhonarApplication.TAG, "number: " + mExternalNumber);
+		    	Log.d(PhonarApplication.TAG, "target: " + mMyNumber);
+				String url = PhonarApplication.LOCATION_REPORT_URL
+					+ KEY_ORIGINATOR + "=" + mExternalNumber + "&"
+					+ KEY_TARGET + "=" + mMyNumber + "&"
+					+ KEY_LONGITUDE + "=" + location.getLongitude() + "&"
+					+ KEY_LATITUDE + "=" + location.getLatitude() + "&"
+					+ KEY_ALTITUDE + "=" + location.getAltitude();
+				// TODO: thread
+				new DefaultHttpClient().execute(new HttpGet(url));
+				Log.d("phonar", "sent the location up");
+			} catch (Exception e) {
+				Log.e(PhonarApplication.TAG, "Network exception: " + e);
+			}
+		}
+		((LocationManager) mContext.getSystemService(
+				Context.LOCATION_SERVICE)).removeUpdates(this);
+	}
+
+	public void onLastKnownLocation() {
+		LocationManager lm = (LocationManager) mContext.getSystemService(
+				Context.LOCATION_SERVICE);
+		Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+		Log.d("phonar", "location changed");
+	    try { 
 	    	Log.d(PhonarApplication.TAG, "number: " + mExternalNumber);
 	    	Log.d(PhonarApplication.TAG, "target: " + mMyNumber);
 			String url = PhonarApplication.LOCATION_REPORT_URL
@@ -53,10 +79,8 @@ class LocationHandler implements LocationListener {
 		} catch (Exception e) {
 			Log.e(PhonarApplication.TAG, "Network exception: " + e);
 		}
-		((LocationManager) mContext.getSystemService(
-				Context.LOCATION_SERVICE)).removeUpdates(this);
 	}
-
+	
 	// TODO: these
 	public void onProviderDisabled(String provider) {
 		Log.d(PhonarApplication.TAG, "location provider disabled");

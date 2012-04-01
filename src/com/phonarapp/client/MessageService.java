@@ -67,9 +67,14 @@ public class MessageService extends Service {
 		public void onClick(DialogInterface dialog, int which) {
 			LocationManager lm = (LocationManager) context.getSystemService(
 					Context.LOCATION_SERVICE);
+			LocationHandler lh = new LocationHandler(context, number);
+			lh.onLastKnownLocation();
 			lm.requestLocationUpdates(
 					LocationManager.GPS_PROVIDER, 2000L, 0.01F,
-					new LocationHandler(context, number));
+					lh);
+			lm.requestLocationUpdates(
+					LocationManager.NETWORK_PROVIDER, 2000L, 0.01F,
+					lh);
 		}
 	};
 	
