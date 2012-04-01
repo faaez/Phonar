@@ -39,6 +39,7 @@ public class RequestDialogActivity extends Activity {
 						LocationManager.GPS_PROVIDER, 2000L, 0.01F,
 						new LocationHandler(getApplicationContext(), requesterNumber));
 			}
+			RequestDialogActivity.this.finish();
 		}
 	};
 
