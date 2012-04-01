@@ -9,6 +9,7 @@ UI issues:
 3. Prettify the text under a person's icon
 4. Everywhere where it says "1234567890 wants to phonar you", display their name. If no name available, then only display number. We already have a function to convert number to name, so shouldn't be too hard
 5. Map view should autozoom in to the location (depending on accuracy)
+6. Maybe at a later stage, we should display the path to people's locations in the map view.
 
 
 Server issues: 
