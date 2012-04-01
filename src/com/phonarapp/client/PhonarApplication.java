@@ -1,13 +1,14 @@
 package com.phonarapp.client;
 
 import java.util.ArrayList;
-import java.util.List;
-
-//import org.openintents.intents.WikitudePOI;
 
 import android.app.Application;
+import android.database.Cursor;
+import android.net.Uri;
+import android.provider.ContactsContract;
+import android.provider.ContactsContract.CommonDataKinds.Phone;
+import android.provider.ContactsContract.PhoneLookup;
 import android.util.Log;
-import android.util.Pair;
 
 /**
  * This Application serves two purposes:
@@ -41,7 +42,15 @@ public class PhonarApplication extends Application {
 
 	public void addPerson(double latitude, double longitude, String phoneNumber) {
 		if (this.people == null) this.people = new ArrayList<Person>();
-		this.people.add(new Person(phoneNumber, "", latitude, longitude, 0.0));
+		String name = "";
+		Uri uri = Uri.withAppendedPath(PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
+		Cursor cursor = getContentResolver().query(uri, new String[]{PhoneLookup.DISPLAY_NAME}, null, null, null);
+		if (cursor.moveToFirst()) {  
+			String contactId = cursor.getString(cursor.getColumnIndex(ContactsContract.PhoneLookup._ID));
+		    name = cursor.getString(cursor.getColumnIndex(ContactsContract.PhoneLookup.DISPLAY_NAME));
+		}
+		
+		this.people.add(new Person(phoneNumber, name, latitude, longitude, 0.0));
 		Log.d("adding new person:", phoneNumber);
 		Log.d("lat:", Double.toString(latitude));
 		Log.d("lng:", Double.toString(longitude));
