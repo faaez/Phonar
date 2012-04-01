@@ -2,7 +2,6 @@ package com.phonarapp.client;
 
 import java.util.ArrayList;
 
-import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
@@ -17,9 +16,10 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Contacts;
 import android.provider.Contacts.PeopleColumns;
 import android.provider.Contacts.PhonesColumns;
+import android.provider.ContactsContract.CommonDataKinds.Phone;
+import android.provider.ContactsContract.Contacts;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
@@ -28,7 +28,7 @@ import android.widget.EditText;
 
 public class Phonar extends Activity {
 
-	private static final int PICK_CONTACT = 1337;
+	private static final int CONTACT_PICKER_RESULT = 1001;  
 
 	private final static String TAG = "PhonarMain";
 
@@ -212,28 +212,30 @@ public class Phonar extends Activity {
 	}
 
 	public void doLaunchContactPicker() {
-		Intent contactPickerIntent = new Intent(Intent.ACTION_PICK,
-				Contacts.Phones.CONTENT_URI);
-		startActivityForResult(contactPickerIntent, PICK_CONTACT);
+		Intent contactPickerIntent = new Intent(Intent.ACTION_PICK,  
+	            Contacts.CONTENT_URI);  
+	    startActivityForResult(contactPickerIntent, CONTACT_PICKER_RESULT);  
 	}
 
 	@Override
 	public void onActivityResult(int reqCode, int resultCode, Intent data) {
+		String phoneNumber;
 		super.onActivityResult(reqCode, resultCode, data);
 
 		switch (reqCode) {
-		case (PICK_CONTACT) :
+		case (CONTACT_PICKER_RESULT) :
 			if (resultCode == Activity.RESULT_OK) {
 				Uri resultUri = data.getData();
-				Cursor cursor =  managedQuery(
-						resultUri, null, null, null, null);
-				if (cursor.moveToFirst()) {
-					String name = cursor.getString(
-							cursor.getColumnIndexOrThrow(PeopleColumns.NAME));
-					 String number = cursor.getString(
-							 cursor.getColumnIndexOrThrow(PhonesColumns.NUMBER));
-					 Log.i(TAG, name + " " + standardizePhoneNumber(number));
-					 startPhonarRequest(standardizePhoneNumber(number));
+				String id = resultUri.getLastPathSegment();  
+				Cursor cursor = getContentResolver().query(  
+				        Phone.CONTENT_URI, null,  
+				        Phone.CONTACT_ID + "=?",  
+				        new String[]{id}, null);  
+				if (cursor.moveToFirst()) {  
+					int phoneIdx = cursor.getColumnIndex(Phone.DATA);  
+					phoneNumber = cursor.getString(phoneIdx);  
+					Log.i(TAG, "PHONE:" + standardizePhoneNumber(phoneNumber));
+					startPhonarRequest(standardizePhoneNumber(phoneNumber));
 				}
 
 			}
