@@ -1,6 +1,6 @@
 package com.phonarapp.client;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 
 //import org.openintents.intents.WikitudePOI;
@@ -20,7 +20,7 @@ import android.util.Pair;
  */
 public class PhonarApplication extends Application {
 	/** POIs */
-	private HashMap<String, Person> people;
+	private ArrayList<Person> people;
 	
 	/** debugging tag used throughout the application */
 	public static final String TAG = "phonar";
@@ -38,11 +38,12 @@ public class PhonarApplication extends Application {
 	/** key for registrationId from Google that app must send to server */
 	public static String REGISTRATION_ID_PARAM = "registrationId";
 
-	public void setPeople(HashMap<String, Person> people) {
-		this.people = people;
+	public void addPerson(double latitude, double longitude, String phoneNumber) {
+		if (this.people == null) this.people = new ArrayList<Person>();
+		this.people.add(new Person(phoneNumber, "", latitude, longitude, 0.0));
 	}
 
-	public HashMap<String, Person> getPeople() {
+	public ArrayList<Person> getPeople() {
 		return people;
 	}
 }

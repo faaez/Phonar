@@ -7,7 +7,7 @@ import gl.GLFactory;
 import gl.scenegraph.MeshComponent;
 
 import java.io.InputStream;
-import java.util.HashMap;
+import java.util.ArrayList;
 
 import system.DefaultARSetup;
 import util.Vec;
@@ -26,7 +26,7 @@ import android.provider.ContactsContract.PhoneLookup;
 import android.widget.Toast;
 
 public class AugmentImage extends Activity {
-	private HashMap<String, Person> people;
+	private ArrayList<Person> people;
 
 	public Bitmap getPhoto(String phoneNumber) {
 		Bitmap defaultPhoto = BitmapFactory.decodeResource(getResources(), android.R.drawable.ic_menu_report_image);
@@ -82,8 +82,8 @@ public class AugmentImage extends Activity {
 
 				int i = 0;
 				// add all objects
-				for (Person p:people.values()) {
-					// image
+
+				for (Person p:people) {
 					o[i] = new GeoObj(p.getLatitude(), p.getLongitude(), p.getAltitude());
 					photo[i] = getPhoto(p.getPhoneNumber());
 					shape[i] = objectFactory.newTexturedSquare("LOL"+i, photo[i], 1.0F);

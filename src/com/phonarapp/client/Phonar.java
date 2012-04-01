@@ -1,6 +1,6 @@
 package com.phonarapp.client;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -78,8 +78,6 @@ public class Phonar extends Activity {
 		setContentView(R.layout.main);
 		final Context context = this;
 
-		((PhonarApplication) getApplication()).setPeople(getPeopleForDebugging());
-
 		Button registerButton = (Button) findViewById(R.id.register_button);
 		registerButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
@@ -88,7 +86,7 @@ public class Phonar extends Activity {
 				registrationIntent.putExtra("app", PendingIntent
 						.getBroadcast(context, 0, new Intent(), 0));
 				registrationIntent.putExtra("sender",
-				"phonarapp@gmail.com");
+				"jeffreyhodesphonarapp@gmail.com");
 				startService(registrationIntent);
 			}
 		});
@@ -183,15 +181,14 @@ public class Phonar extends Activity {
 		.putString(KEY_USER_NUMBER, number).commit();
 	}
 
-	public static HashMap<String, Person> getPeopleForDebugging() {
-		HashMap<String, Person> people = new HashMap<String, Person>();
+	public static ArrayList<Person> getPeopleForDebugging() {
+		ArrayList<Person> people = new ArrayList<Person>();
 		Person person = new Person("2095597960", "Hamza", 40.347607,-74.654009, 36);
-		people.put("2095597960", person);
+		people.add(person);
 		person = new Person("6096136481", "Zeerak", 40.348081,-74.652207, 36);
-		people.put("6096136481", person);
+		people.add(person);
 		person = new Person("6097516257", "Faaez", 40.348556,-74.650362, 36);
-		people.put("6097516257", person);
-
+		people.add(person);
 		return people;
 	}
 

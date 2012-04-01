@@ -1,5 +1,8 @@
 package com.phonarapp.client;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
@@ -17,6 +20,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
+import android.view.WindowManager.BadTokenException;
 
 /**
  * MessageService is an IntentService that handles communicating messages
@@ -58,14 +62,20 @@ public class MessageService extends Service {
 	private String number;
 	private Context context;
 	
+	
 	/** OnClickListener for comfirming location sharing */
 	private final OnClickListener mShareLocationListener = new OnClickListener() {
 		public void onClick(DialogInterface dialog, int which) {
 			LocationManager lm = (LocationManager) context.getSystemService(
 					Context.LOCATION_SERVICE);
+			LocationHandler lh = new LocationHandler(context, number);
+			lh.onLastKnownLocation();
 			lm.requestLocationUpdates(
 					LocationManager.GPS_PROVIDER, 2000L, 0.01F,
-					new LocationHandler(context, number));
+					lh);
+			lm.requestLocationUpdates(
+					LocationManager.NETWORK_PROVIDER, 2000L, 0.01F,
+					lh);
 		}
 	};
 	
@@ -114,6 +124,8 @@ public class MessageService extends Service {
 			double longitude = Double.parseDouble(extras.getString(LocationHandler.KEY_LONGITUDE));
 			String target = extras.getString(LocationHandler.KEY_TARGET);
 			
+			((PhonarApplication)getApplication()).addPerson(latitude, longitude, target);
+			
 			int icon = R.drawable.notification23;
 			CharSequence tickerText = target + " has accepted your request";
 			long when = System.currentTimeMillis();
@@ -152,16 +164,27 @@ public class MessageService extends Service {
 			/* Sends a notification. */
 			//TODO: make notification trigger location sharing
 
+			//HashMap for converting a number into a person's name
+			ArrayList<Person> people = ((PhonarApplication)getApplication()).getPeople();
+			String name = number;
+			for (Person p : people) {
+				if (p.getPhoneNumber().equals(number)) {
+					name = p.getName();
+					break;
+				}
+			}
+			
+			CharSequence tickerText;
+			tickerText = name + " wants to Phonar you!";
 			
 			int icon = R.drawable.notification23;
-			CharSequence tickerText = number + " wants to Phonar you!";
 			long when = System.currentTimeMillis();
 
 			Notification notification = new Notification(icon, tickerText, when);
 			notification.flags |= Notification.FLAG_ONGOING_EVENT | Notification.FLAG_AUTO_CANCEL;  
 			
 			Context appContext = getApplicationContext();
-			CharSequence contentTitle = number + " wants to Phonar you!";
+			CharSequence contentTitle = name + " wants to Phonar you!";
 			CharSequence contentText = "Accept by touching here";
 			Intent notificationIntent = new Intent(this, RequestDialogActivity.class);
 						
@@ -175,13 +198,14 @@ public class MessageService extends Service {
 			final int id = 1;
 
 			notificationManager.notify(id, notification);
-			
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+			try {
+			AlertDialog.Builder builder = new AlertDialog.Builder(context);
 			builder.setPositiveButton("Yes", mShareLocationListener)
 			.setNegativeButton("No", mEmptyListener)
-			.setTitle("Share your location with " + number + " ?");
+			.setTitle("Share your location with " + name + " ?");
 			builder.create().show();
-
+			} catch (BadTokenException e) {}
 	
 			Log.d(PhonarApplication.TAG,
 					"extracted number in type_request_location: " + number);

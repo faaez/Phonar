@@ -123,5 +123,10 @@
         android:largeScreens="true"
         android:normalScreens="true"
         android:smallScreens="true" />
+    <com.google.android.maps.MapView
+                 android:layout_width="fill_parent"
+                 android:layout_height="fill_parent"
+                 android:apiKey="0Y2F_B_QBjjFnWLhGg0leZ5cmo8SfOLVZy6kEFg"
+                 />
 	
 </manifest>
