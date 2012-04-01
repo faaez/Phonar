@@ -90,7 +90,7 @@ public class Phonar extends Activity {
 				registrationIntent.putExtra("app", PendingIntent
 						.getBroadcast(context, 0, new Intent(), 0));
 				registrationIntent.putExtra("sender",
-				"jeffreyhodes@gmail.com");
+				"phonarapp@gmail.com");
 				startService(registrationIntent);
 			}
 		});
