@@ -180,7 +180,7 @@ public class Phonar extends Activity {
 		case DIALOG_ENTER_EXTERNAL_NUMBER_ID:
 			AlertDialog.Builder externalBuilder = new AlertDialog.Builder(this);
 			mTargetNumber = new EditText(this);
-			mUserNumberEditText.setInputType(InputType.TYPE_CLASS_PHONE);
+			mTargetNumber.setInputType(InputType.TYPE_CLASS_PHONE);
 			externalBuilder.setPositiveButton("BRONAR!", mBronarClickListener)
 			.setView(mTargetNumber);
 			dialog = externalBuilder.create();

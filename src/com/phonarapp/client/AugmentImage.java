@@ -194,9 +194,6 @@ public class AugmentImage extends Activity {
 					i++;
 					
 				}
-				ImageView iv = new ImageView(getApplicationContext());
-				iv.setImageBitmap(toShow[i-1]);
-				AugmentImage.this.setContentView(iv);
 			}
 
 		});
