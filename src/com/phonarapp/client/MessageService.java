@@ -3,6 +3,7 @@ package com.phonarapp.client;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
@@ -136,7 +137,7 @@ public class MessageService extends Service {
 			Context appContext = getApplicationContext();
 			CharSequence contentTitle = target + " is sharing location";
 			CharSequence contentText = "Touch here to view";
-			Intent notificationIntent = new Intent(this, PhonarMapActivity.class);
+			Intent notificationIntent = new Intent(this, AugmentImage.class);
 			notificationIntent.putExtra(LocationHandler.KEY_LATITUDE, latitude);
 			notificationIntent.putExtra(LocationHandler.KEY_LONGITUDE, longitude);
 
@@ -167,12 +168,12 @@ public class MessageService extends Service {
 			//HashMap for converting a number into a person's name
 			ArrayList<Person> people = ((PhonarApplication)getApplication()).getPeople();
 			String name = number;
-			for (Person p : people) {
+			/*for (Person p : people) {
 				if (p.getPhoneNumber().equals(number)) {
 					name = p.getName();
 					break;
 				}
-			}
+			}*/
 			
 			CharSequence tickerText;
 			tickerText = name + " wants to Phonar you!";
@@ -239,7 +240,8 @@ public class MessageService extends Service {
 							+ "=" + getNumber(context)
 							+ "&" + PhonarApplication.REGISTRATION_ID_PARAM
 							+ "=" + registration[0];
-						new DefaultHttpClient().execute(new HttpGet(url));
+						HttpResponse response = new DefaultHttpClient().execute(new HttpGet(url));
+						Log.d("registration request status:", response.getStatusLine().toString());
 					} catch (Exception e) {
 						Log.e(PhonarApplication.TAG, "Network exception: " + e);
 					}

@@ -6,6 +6,7 @@ import java.util.List;
 //import org.openintents.intents.WikitudePOI;
 
 import android.app.Application;
+import android.util.Log;
 import android.util.Pair;
 
 /**
@@ -41,6 +42,9 @@ public class PhonarApplication extends Application {
 	public void addPerson(double latitude, double longitude, String phoneNumber) {
 		if (this.people == null) this.people = new ArrayList<Person>();
 		this.people.add(new Person(phoneNumber, "", latitude, longitude, 0.0));
+		Log.d("adding new person:", phoneNumber);
+		Log.d("lat:", Double.toString(latitude));
+		Log.d("lng:", Double.toString(longitude));
 	}
 
 	public ArrayList<Person> getPeople() {
