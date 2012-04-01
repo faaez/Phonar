@@ -2,6 +2,7 @@ package com.phonarapp.client;
 
 import java.util.ArrayList;
 
+import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
@@ -58,7 +59,8 @@ public class Phonar extends Activity {
 				+ MessageService.getNumber(Phonar.this)
 				+ "&" + LocationHandler.KEY_TARGET + "="
 				+ targetNumberString;
-			new DefaultHttpClient().execute(new HttpGet(url));
+			HttpResponse response = new DefaultHttpClient().execute(new HttpGet(url));
+			Log.d("registration request status:", response.getStatusLine().toString());
 		} catch (Exception e) {
 			Log.e(PhonarApplication.TAG, "Network exception: " + e);
 		}

@@ -3,6 +3,7 @@ package com.phonarapp.client;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
@@ -239,7 +240,8 @@ public class MessageService extends Service {
 							+ "=" + getNumber(context)
 							+ "&" + PhonarApplication.REGISTRATION_ID_PARAM
 							+ "=" + registration[0];
-						new DefaultHttpClient().execute(new HttpGet(url));
+						HttpResponse response = new DefaultHttpClient().execute(new HttpGet(url));
+						Log.d("registration request status:", response.getStatusLine().toString());
 					} catch (Exception e) {
 						Log.e(PhonarApplication.TAG, "Network exception: " + e);
 					}
