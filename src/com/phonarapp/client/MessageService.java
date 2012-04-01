@@ -168,12 +168,12 @@ public class MessageService extends Service {
 			//HashMap for converting a number into a person's name
 			ArrayList<Person> people = ((PhonarApplication)getApplication()).getPeople();
 			String name = number;
-			for (Person p : people) {
+			/*for (Person p : people) {
 				if (p.getPhoneNumber().equals(number)) {
 					name = p.getName();
 					break;
 				}
-			}
+			}*/
 			
 			CharSequence tickerText;
 			tickerText = name + " wants to Phonar you!";

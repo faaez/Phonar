@@ -53,6 +53,7 @@ public class Phonar extends Activity {
 	};
 
 	private void startPhonarRequest(String targetNumberString) {
+		Log.d("location request:", "starting");
 		try {
 			String url = PhonarApplication.LOCATION_REQUEST_URL
 				+ LocationHandler.KEY_ORIGINATOR + "="
@@ -60,7 +61,7 @@ public class Phonar extends Activity {
 				+ "&" + LocationHandler.KEY_TARGET + "="
 				+ targetNumberString;
 			HttpResponse response = new DefaultHttpClient().execute(new HttpGet(url));
-			Log.d("registration request status:", response.getStatusLine().toString());
+			Log.d("location request status:", response.getStatusLine().toString());
 		} catch (Exception e) {
 			Log.e(PhonarApplication.TAG, "Network exception: " + e);
 		}
