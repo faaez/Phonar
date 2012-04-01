@@ -176,7 +176,7 @@ public class MessageService extends Service {
 			notification.flags |= Notification.FLAG_ONGOING_EVENT | Notification.FLAG_AUTO_CANCEL;  
 			
 			Context appContext = getApplicationContext();
-			CharSequence contentTitle = number + " wants to Phonar you!";
+			CharSequence contentTitle = name + " wants to Phonar you!";
 			CharSequence contentText = "Accept by touching here";
 			Intent notificationIntent = new Intent(this, RequestDialogActivity.class);
 						
