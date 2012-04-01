@@ -34,22 +34,38 @@ public class PhonarMapActivity extends MapActivity {
 		addPeopleToMap();
 	}
 
+//	private void addPeopleToMap() {
+//		mapOverlays = mapView.getOverlays();
+//		drawable = this.getResources().getDrawable(R.drawable.androidmarker);
+//		itemizedOverlay = new PhonarItemizedMapOverlay(drawable, this.getBaseContext());
+//
+//		Bundle bundle = getIntent().getExtras();
+//		double latitude = bundle.getDouble(LocationHandler.KEY_LATITUDE);
+//		double longitude = bundle.getDouble(LocationHandler.KEY_LONGITUDE);
+//		String target = bundle.getString(LocationHandler.KEY_TARGET);
+//
+//		GeoPoint point = new GeoPoint((int)(latitude * 1E6), (int)(longitude * 1E6));
+//		OverlayItem overlayItem = new OverlayItem(point, target, target);
+//		itemizedOverlay.addOverlay(overlayItem);
+//		mapOverlays.add(itemizedOverlay);
+//		mapView.invalidate();
+//	}
+	
 	private void addPeopleToMap() {
 		mapOverlays = mapView.getOverlays();
 		drawable = this.getResources().getDrawable(R.drawable.androidmarker);
 		itemizedOverlay = new PhonarItemizedMapOverlay(drawable, this.getBaseContext());
 
-		Bundle bundle = getIntent().getExtras();
-		double latitude = bundle.getDouble(LocationHandler.KEY_LATITUDE);
-		double longitude = bundle.getDouble(LocationHandler.KEY_LONGITUDE);
-		String target = bundle.getString(LocationHandler.KEY_TARGET);
-
-		GeoPoint point = new GeoPoint((int)(latitude * 1E6), (int)(longitude * 1E6));
-		OverlayItem overlayItem = new OverlayItem(point, target, target);
-		itemizedOverlay.addOverlay(overlayItem);
+		//Person person = Phonar.getPeopleForDebugging().get("34");
+		for (Person person : ((PhonarApplication) getApplication()).getPeople().values()) {
+			GeoPoint point = new GeoPoint((int)(person.getLatitude() * 1E6), (int)(person.getLongitude() * 1E6));
+			OverlayItem overlayitem = new OverlayItem(point, person.getName(), person.getPhoneNumber());
+		itemizedOverlay.addOverlay(overlayitem);
+		}
 		mapOverlays.add(itemizedOverlay);
-		mapView.invalidate();
+		//mapView.invalidate();
 	}
+
 	
 
 }

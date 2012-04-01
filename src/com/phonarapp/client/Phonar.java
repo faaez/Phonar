@@ -34,9 +34,6 @@ public class Phonar extends Activity {
 	/** Temporary solution until we integrate with contacts */
 	private EditText mTargetNumber;
 
-	/** POIs */
-	private HashMap<String, Person> people;
-
 	/** OnClickListener for dialog asking user to input their number */
 	private final OnClickListener mSaveClickListener = new OnClickListener() {
 		public void onClick(DialogInterface dialog, int which) {
@@ -80,7 +77,7 @@ public class Phonar extends Activity {
 		setContentView(R.layout.main);
 		final Context context = this;
 
-		this.people = getPeopleForDebugging();
+		((PhonarApplication) getApplication()).setPeople(getPeopleForDebugging());
 
 		Button registerButton = (Button) findViewById(R.id.register_button);
 		registerButton.setOnClickListener(new View.OnClickListener() {
@@ -196,14 +193,6 @@ public class Phonar extends Activity {
 		person = new Person("78", "Faaez", 38.683333, -121.766667, 36);
 		people.put("78", person);
 
-		return people;
-	}
-
-	public void setPeople(HashMap<String, Person> people) {
-		this.people = people;
-	}
-
-	public HashMap<String, Person> getPeople() {
 		return people;
 	}
 

@@ -23,7 +23,7 @@ public class PhonarItemizedMapOverlay extends ItemizedOverlay {
 	@Override
 	public boolean onTouchEvent(MotionEvent event, MapView mapview){
         if (event.getAction()==1){
-        	Intent arIntent = new Intent(context, ArActivity.class);
+        	Intent arIntent = new Intent(context, ARTest.class);
 			context.startActivity(arIntent);
         }
         return false;

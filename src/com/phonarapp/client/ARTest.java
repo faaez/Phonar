@@ -20,11 +20,12 @@ public class ARTest extends Activity  {
 			@Override
 			public void addObjectsTo(GL1Renderer renderer, World world,
 					GLFactory objectFactory) {
-				GeoObj o = new GeoObj(40.344215, -74.654521, 0);        // <-------- GPS location, altitude
-				o.setComp(objectFactory.newCircle(Color.red()));
-				world.add(o);
+				for (Person person : ((PhonarApplication)getApplication()).getPeople().values()) {
+					GeoObj poi = new GeoObj(person.getLatitude(), person.getLongitude(), person.getAltitude());
+					poi.setComp(objectFactory.newDiamond(Color.red()));
+					world.add(poi);
+				}
 			}
-			
 		});
 	}
 	
