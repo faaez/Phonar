@@ -71,6 +71,7 @@
 			</intent-filter>
 		</activity>
 		<activity android:name=".ARTest"/>
+		<activity android:name=".AugmentImage"/>
 		<activity android:name=".ArActivity" />
 		<activity android:name=".PhonarMapActivity" />
 		<activity android:name=".RequestDialogActivity" />

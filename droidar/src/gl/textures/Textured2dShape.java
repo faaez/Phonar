@@ -7,6 +7,7 @@ import javax.microedition.khronos.opengles.GL10;
 import javax.microedition.khronos.opengles.GL11Ext;
 
 import android.graphics.Bitmap;
+import android.util.Log;
 
 /**
  * This Class uses the GL11 extension to dray a image to the screen which will

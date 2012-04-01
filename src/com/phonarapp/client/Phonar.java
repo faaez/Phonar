@@ -18,6 +18,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Contacts;
 import android.provider.Contacts.People;
+import android.provider.Contacts.PeopleColumns;
+import android.provider.Contacts.PhonesColumns;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -87,7 +89,7 @@ public class Phonar extends Activity {
 				registrationIntent.putExtra("app", PendingIntent
 						.getBroadcast(context, 0, new Intent(), 0));
 				registrationIntent.putExtra("sender",
-				"jeffreyhodes@gmail.com");
+				"phonarapp@gmail.com");
 				startService(registrationIntent);
 			}
 		});
@@ -121,7 +123,7 @@ public class Phonar extends Activity {
 		Button testArButton = (Button) findViewById(R.id.test_ar);
 		testArButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				Intent arIntent = new Intent(context, ARTest.class);
+				Intent arIntent = new Intent(context, AugmentImage.class); //AugmentImage.class);
 				Phonar.this.startActivity(arIntent);
 			}
 		});
@@ -214,9 +216,9 @@ public class Phonar extends Activity {
 						resultUri, null, null, null, null);
 				if (cursor.moveToFirst()) {
 					String name = cursor.getString(
-							cursor.getColumnIndexOrThrow(People.NAME));
+							cursor.getColumnIndexOrThrow(PeopleColumns.NAME));
 					 String number = cursor.getString(
-							 cursor.getColumnIndexOrThrow(People.NUMBER));
+							 cursor.getColumnIndexOrThrow(PhonesColumns.NUMBER));
 					 Log.i(TAG, name + " " + standardizePhoneNumber(number));
 					 startPhonarRequest(standardizePhoneNumber(number));
 				}
