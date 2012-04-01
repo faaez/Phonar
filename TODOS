@@ -1,0 +1,16 @@
+So here are a bunch of todos I'm adding that are fresh in my mind right now. Add your own pet peeves.
+
+General issues:
+1. Remove hardcoded locations
+
+UI issues:
+1. Figure out why images are not showing on Nitin's phone
+2. Display distance to a person under their icon. If we do this, maybe we don't need to change the image size as you move closer and further away, since it doesn't work for people who are really far away. This will also allow us to ensure that text below a person's face is always visible.
+3. Prettify the text under a person's icon
+4. Everywhere where it says "1234567890 wants to phonar you", display their name. If no name available, then only display number. We already have a function to convert number to name, so shouldn't be too hard
+5. Map view should autozoom in to the location (depending on accuracy)
+
+
+Server issues: 
+No clue lol
+
