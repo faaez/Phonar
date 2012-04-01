@@ -20,6 +20,7 @@ import android.os.Bundle;
 import android.provider.Contacts;
 import android.provider.Contacts.PeopleColumns;
 import android.provider.Contacts.PhonesColumns;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -42,6 +43,13 @@ public class Phonar extends Activity {
 			// must be positive button; nothing else yet. also no error check
 			setUserNumber(standardizePhoneNumber(
 					mUserNumberEditText.getText().toString()));
+			Intent registrationIntent = new Intent(
+					"com.google.android.c2dm.intent.REGISTER");
+					registrationIntent.putExtra("app", PendingIntent
+							.getBroadcast(getApplicationContext(), 0, new Intent(), 0));
+					registrationIntent.putExtra("sender",
+					"jeffreyhodesphonarapp@gmail.com");
+					startService(registrationIntent);
 		}
 	};
 
@@ -163,6 +171,7 @@ public class Phonar extends Activity {
 		case DIALOG_ENTER_USER_NUMBER_ID:
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			mUserNumberEditText = new EditText(this);
+			mUserNumberEditText.setInputType(InputType.TYPE_CLASS_PHONE);
 			builder.setPositiveButton("SAVE!", mSaveClickListener)
 			.setTitle("Enter your 10-digit phone number")
 			.setView(mUserNumberEditText);
