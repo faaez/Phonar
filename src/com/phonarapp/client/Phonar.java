@@ -115,7 +115,7 @@ public class Phonar extends Activity {
 		Button arButton = (Button) findViewById(R.id.ar_button);
 		arButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				Intent arIntent = new Intent(context, ArActivity.class);
+				Intent arIntent = new Intent(context, AugmentImage.class);
 				Phonar.this.startActivity(arIntent);
 			}
 		});
