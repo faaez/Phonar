@@ -185,14 +185,12 @@ public class Phonar extends Activity {
 
 	public static HashMap<String, Person> getPeopleForDebugging() {
 		HashMap<String, Person> people = new HashMap<String, Person>();
-		Person person = new Person("12", "Clem", 37.7793, -122.4192, 36);
-		people.put("12", person);
-		person = new Person("34", "Jorge", 36.683333, -122.766667, 36);
-		people.put("34", person);
-		person = new Person("56", "Jeff", 37.683333, -124.766667, 36);
-		people.put("56", person);
-		person = new Person("78", "Faaez", 38.683333, -121.766667, 36);
-		people.put("78", person);
+		Person person = new Person("2095597960", "Hamza", 40.347607,-74.654009, 36);
+		people.put("2095597960", person);
+		person = new Person("6096136481", "Zeerak", 40.348081,-74.652207, 36);
+		people.put("6096136481", person);
+		person = new Person("6097516257", "Faaez", 40.348556,-74.650362, 36);
+		people.put("6097516257", person);
 
 		return people;
 	}

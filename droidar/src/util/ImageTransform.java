@@ -48,15 +48,19 @@ public class ImageTransform {
 	 */
 	public static Bitmap rotateBitmap(Bitmap bitmap, int angle,
 			float smoothingFactor) {
+		/*
 		Bitmap result = ImageTransform.resizeBitmap(bitmap, bitmap.getHeight()
 				* smoothingFactor, bitmap.getWidth() * smoothingFactor);
 		result = rotateBitmap(result, angle);
 		result = ImageTransform.resizeBitmap(result, result.getHeight()
 				/ smoothingFactor, result.getWidth() / smoothingFactor);
 		return result;
+		*/
+		return bitmap;
 	}
 
 	public static Bitmap rotateBitmap(Bitmap bitmap, int angle) {
+		/*
 		int width = bitmap.getWidth();
 		int height = bitmap.getHeight();
 		Bitmap result = Bitmap.createBitmap(width, height, bitmap.getConfig());
@@ -67,6 +71,8 @@ public class ImageTransform {
 		p.setAntiAlias(true);
 		canvas.drawBitmap(bitmap, matrix, p);
 		return result;
+		*/
+		return bitmap;
 	}
 
 	public static Bitmap resizeBitmap(Bitmap bitmap, float newHeight,

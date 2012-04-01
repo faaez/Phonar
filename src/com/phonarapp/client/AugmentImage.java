@@ -1,17 +1,13 @@
-/*
- * TO DO: 
- * 1. Add marker (Google Maps arrow)
- * 2. Add name
- */
-
 package com.phonarapp.client;
 
 import geo.GeoObj;
 import gl.GL1Renderer;
+import gl.GLCamera;
 import gl.GLFactory;
 import gl.scenegraph.MeshComponent;
 
 import java.io.InputStream;
+import java.util.HashMap;
 
 import system.DefaultARSetup;
 import util.Vec;
@@ -22,6 +18,7 @@ import android.content.ContentUris;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -29,20 +26,12 @@ import android.provider.ContactsContract.PhoneLookup;
 import android.widget.Toast;
 
 public class AugmentImage extends Activity {
-	private final double default_latitude[] = {40.350265, 40.350583};
-	private final double default_longitude[] = {-74.652733, -74.651392};
-	private final double default_altitude[] = {50, 50};
-	private final String default_phoneNumber[] = {"9134858847", "6092162135"}; // Rik's phone number. Tell the ladies.
-	private double latitude[];
-	private double longitude[];
-	private double altitude[];
-	private String phoneNumber[];
-	
+	private HashMap<String, Person> people;
 
 	public Bitmap getPhoto(String phoneNumber) {
 		Bitmap defaultPhoto = BitmapFactory.decodeResource(getResources(), android.R.drawable.ic_menu_report_image);
 		if (phoneNumber == null) return defaultPhoto;
-		
+
 		Uri phoneUri = Uri.withAppendedPath(PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
 		Uri photoUri = null;
 		ContentResolver cr = this.getContentResolver();
@@ -68,20 +57,13 @@ public class AugmentImage extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		Toast.makeText(getApplicationContext(), "NEW", Toast.LENGTH_SHORT).show();
-		
-		if (getIntent().getExtras() != null) {
-			latitude = getIntent().getExtras().getDoubleArray("latitude");
-			longitude = getIntent().getExtras().getDoubleArray("longitude");
-			altitude = getIntent().getExtras().getDoubleArray("altitude");
-			phoneNumber = getIntent().getExtras().getStringArray("phoneNumber");
-		}
-		else {
-			latitude = default_latitude;
-			longitude = default_longitude;
-			altitude = default_altitude;
-			phoneNumber = default_phoneNumber;
+
+		this.people = ((PhonarApplication)getApplication()).getPeople();
+
+		if (people.isEmpty()) {
+			people = Phonar.getPeopleForDebugging();
 		}
 
 		system.ArActivity.startWithSetup(this, new DefaultARSetup() {
@@ -89,30 +71,51 @@ public class AugmentImage extends Activity {
 			@Override
 			public void addObjectsTo(GL1Renderer renderer, World world,
 					GLFactory objectFactory) {
-				if (latitude == null) return; // no objects to add
-				
-				GeoObj[] o = new GeoObj[latitude.length];
-				GeoObj[] arrows = new GeoObj[latitude.length];
-				Bitmap[] photo = new Bitmap[latitude.length];
-				MeshComponent[] shape = new MeshComponent[latitude.length];
-				
+				if (people.isEmpty()) return; // no objects to add
+
+				GeoObj[] o = new GeoObj[people.size()];   // image geo object
+				GeoObj[] o2 = new GeoObj[people.size()];  // background geo object
+				GeoObj[] o3 = new GeoObj[people.size()];  // name geo object
+				Bitmap[] photo = new Bitmap[people.size()];
+				MeshComponent[] shape = new MeshComponent[people.size()];
+				MeshComponent[] bg = new MeshComponent[people.size()];
+
+				int i = 0;
 				// add all objects
-				for (int i = 0; i < latitude.length; i++) {
-					if (longitude.length < i || altitude.length < i || phoneNumber.length < i) break;
-					
-					// Put in person's image
-					o[i] = new GeoObj(latitude[i], longitude[i], altitude[i]);
-					photo[i] = getPhoto(phoneNumber[i]);
+				for (Person p:people.values()) {
+					// image
+					o[i] = new GeoObj(p.getLatitude(), p.getLongitude(), p.getAltitude());
+					photo[i] = getPhoto(p.getPhoneNumber());
 					shape[i] = objectFactory.newTexturedSquare("LOL"+i, photo[i], 1.0F);
 					shape[i].setScale(new Vec(10, 10, 10));
 					o[i].setComp(shape[i]);
 					world.add(o[i]);
 					
 					
-					// Put arrow
-					arrows[i] = new GeoObj(latitude[i], longitude[i], /* altitude[i] == 0 ? 0 : */ altitude[i] + 10000);
-					arrows[i].setComp(objectFactory.newArrow());
-					world.add(arrows[i]);
+					
+					// background
+					/*
+					o2[i] = new GeoObj(p.getLatitude(), p.getLongitude(), p.getAltitude());
+					Bitmap bitmap = Bitmap.createBitmap(photo[i].getWidth(), photo[i].getHeight(), Bitmap.Config.RGB_565);
+					bitmap.eraseColor(Color.WHITE);
+					bg[i] = objectFactory.newTexturedSquare("Lolzies"+i, bitmap, 1.2F);
+					bg[i].setScale(new Vec(10, 10, 10));
+					o2[i].setComp(bg[i]);
+					world.add(o2[i]);
+					*/
+					
+					o2[i] = new GeoObj(p.getLatitude(), p.getLongitude(), p.getAltitude());
+					o2[i].setComp(objectFactory.newArrow());
+					world.add(o2[i]);
+					
+					// text
+					GLCamera glcam = new GLCamera();
+					o3[i] = new GeoObj(p.getLatitude(), p.getLongitude(), p.getAltitude());
+					o3[i].setComp(objectFactory.newTextObject(p.getName(), new Vec(0, 0, 0), getApplicationContext(), glcam));
+					world.add(o3[i]);
+					
+					i++;
+					
 				}
 			}
 
