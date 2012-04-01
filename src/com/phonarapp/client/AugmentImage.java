@@ -22,6 +22,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -117,7 +118,7 @@ public class AugmentImage extends Activity {
 					// add person
 					o[i] = new GeoObj(p.getLatitude(), p.getLongitude(), p.getAltitude());
 					photo[i] = getPhoto(p.getPhoneNumber());
-					int new_height = (int)(1+(1.2*photo[i].getHeight()));
+					int new_height = (int)(1+(1.4*photo[i].getHeight()));
 					int new_width = 2 + photo[i].getWidth();
 					int[] pixels = new int[new_height*new_width];
 					int j = 0, k = 0;
@@ -139,17 +140,25 @@ public class AugmentImage extends Activity {
 						}
 					}
 					Bitmap temp = Bitmap.createBitmap(pixels, new_width, new_height, Bitmap.Config.RGB_565);
-					toShow[i] = temp.copy(Bitmap.Config.RGB_565, true);
+					toShow[i] = Bitmap.createBitmap(new_width, new_height, Bitmap.Config.RGB_565);
 					// add name to image
 					Canvas canvas = new Canvas(toShow[i]);
 					Paint paint = new Paint();
-					paint.setColor(Color.RED);
-					paint.setTextSize(10F);
-					canvas.drawText(p.getName(), 0.5F, 0.083F, paint);
+					paint.setColor(Color.BLACK);
+					float scale = getApplicationContext().getResources().getDisplayMetrics().density;
+					paint.setTextSize(14*scale);
+					paint.setFlags(Paint.ANTI_ALIAS_FLAG);
+					Rect bounds = new Rect();
+					paint.getTextBounds(p.getName(), 0, p.getName().length(), bounds);
+					int x = (temp.getWidth() - bounds.width())/2;
+					int y = 300*(temp.getHeight() - bounds.height())/400;
+					canvas.drawBitmap(temp, 0, 0, null);
+					canvas.drawText(p.getName(), x*scale, y*scale, paint);
+					
 					
 					// add to world
 					shape[i] = objectFactory.newTexturedSquare("LOL"+i, toShow[i], 1.0F);
-					shape[i].setScale(new Vec(10, 10, 10));
+					shape[i].setScale(new Vec(20, 20, 20));
 					shape[i].addAnimation(new AnimationFaceToCamera(camera, 0.5f));
 					o[i].setComp(shape[i]);
 					final String phone_final = p.getPhoneNumber();
