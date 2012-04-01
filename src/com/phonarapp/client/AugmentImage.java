@@ -31,7 +31,7 @@ import android.widget.Toast;
 public class AugmentImage extends Activity {
 	private final double default_latitude[] = {40.350265, 40.350583};
 	private final double default_longitude[] = {-74.652733, -74.651392};
-	private final double default_altitude[] = {0, 0};
+	private final double default_altitude[] = {50, 50};
 	private final String default_phoneNumber[] = {"9134858847", "6092162135"}; // Rik's phone number. Tell the ladies.
 	private double latitude[];
 	private double longitude[];
@@ -92,6 +92,7 @@ public class AugmentImage extends Activity {
 				if (latitude == null) return; // no objects to add
 				
 				GeoObj[] o = new GeoObj[latitude.length];
+				GeoObj[] arrows = new GeoObj[latitude.length];
 				Bitmap[] photo = new Bitmap[latitude.length];
 				MeshComponent[] shape = new MeshComponent[latitude.length];
 				
@@ -99,12 +100,19 @@ public class AugmentImage extends Activity {
 				for (int i = 0; i < latitude.length; i++) {
 					if (longitude.length < i || altitude.length < i || phoneNumber.length < i) break;
 					
+					// Put in person's image
 					o[i] = new GeoObj(latitude[i], longitude[i], altitude[i]);
 					photo[i] = getPhoto(phoneNumber[i]);
 					shape[i] = objectFactory.newTexturedSquare("LOL"+i, photo[i], 1.0F);
 					shape[i].setScale(new Vec(10, 10, 10));
 					o[i].setComp(shape[i]);
 					world.add(o[i]);
+					
+					
+					// Put arrow
+					arrows[i] = new GeoObj(latitude[i], longitude[i], /* altitude[i] == 0 ? 0 : */ altitude[i] + 10000);
+					arrows[i].setComp(objectFactory.newArrow());
+					world.add(arrows[i]);
 				}
 			}
 

@@ -17,7 +17,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Contacts;
-import android.provider.Contacts.People;
 import android.provider.Contacts.PeopleColumns;
 import android.provider.Contacts.PhonesColumns;
 import android.util.Log;
