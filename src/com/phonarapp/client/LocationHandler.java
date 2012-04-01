@@ -39,21 +39,26 @@ class LocationHandler implements LocationListener {
 	public void onLocationChanged(Location location) {
 		Log.d("phonar", "location changed");
 		if (location.getAccuracy() < 30F) {
-		    try { 
-		    	Log.d(PhonarApplication.TAG, "number: " + mExternalNumber);
-		    	Log.d(PhonarApplication.TAG, "target: " + mMyNumber);
-				String url = PhonarApplication.LOCATION_REPORT_URL
-					+ KEY_ORIGINATOR + "=" + mExternalNumber + "&"
-					+ KEY_TARGET + "=" + mMyNumber + "&"
-					+ KEY_LONGITUDE + "=" + location.getLongitude() + "&"
-					+ KEY_LATITUDE + "=" + location.getLatitude() + "&"
-					+ KEY_ALTITUDE + "=" + location.getAltitude();
-				// TODO: thread
-				new DefaultHttpClient().execute(new HttpGet(url));
-				Log.d("phonar", "sent the location up");
-			} catch (Exception e) {
-				Log.e(PhonarApplication.TAG, "Network exception: " + e);
-			}
+	    	Log.d(PhonarApplication.TAG, "number: " + mExternalNumber);
+	    	Log.d(PhonarApplication.TAG, "target: " + mMyNumber);
+			final String url = PhonarApplication.LOCATION_REPORT_URL
+				+ KEY_ORIGINATOR + "=" + mExternalNumber + "&"
+				+ KEY_TARGET + "=" + mMyNumber + "&"
+				+ KEY_LONGITUDE + "=" + location.getLongitude() + "&"
+				+ KEY_LATITUDE + "=" + location.getLatitude() + "&"
+				+ KEY_ALTITUDE + "=" + location.getAltitude();
+			Thread thread = new Thread(new Runnable(){
+				  @Override
+				  public void run(){
+					  try { 
+						  new DefaultHttpClient().execute(new HttpGet(url));
+						  Log.d("phonar", "sent the location up");
+					  } catch (Exception e) {
+						  Log.e(PhonarApplication.TAG, "Network exception: " + e);
+					  }
+				  }
+			});
+			thread.run();
 		}
 		((LocationManager) mContext.getSystemService(
 				Context.LOCATION_SERVICE)).removeUpdates(this);
@@ -63,22 +68,27 @@ class LocationHandler implements LocationListener {
 		LocationManager lm = (LocationManager) mContext.getSystemService(
 				Context.LOCATION_SERVICE);
 		Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-		Log.d("phonar", "location changed");
-	    try { 
-	    	Log.d(PhonarApplication.TAG, "number: " + mExternalNumber);
-	    	Log.d(PhonarApplication.TAG, "target: " + mMyNumber);
-			String url = PhonarApplication.LOCATION_REPORT_URL
-				+ KEY_ORIGINATOR + "=" + mExternalNumber + "&"
-				+ KEY_TARGET + "=" + mMyNumber + "&"
-				+ KEY_LONGITUDE + "=" + location.getLongitude() + "&"
-				+ KEY_LATITUDE + "=" + location.getLatitude() + "&"
-				+ KEY_ALTITUDE + "=" + location.getAltitude();
-			// TODO: thread
-			new DefaultHttpClient().execute(new HttpGet(url));
-			Log.d("phonar", "sent the location up");
-		} catch (Exception e) {
-			Log.e(PhonarApplication.TAG, "Network exception: " + e);
-		}
+		Log.d("phonar", "sending last location");
+    	Log.d(PhonarApplication.TAG, "number: " + mExternalNumber);
+    	Log.d(PhonarApplication.TAG, "target: " + mMyNumber);
+		final String url = PhonarApplication.LOCATION_REPORT_URL
+			+ KEY_ORIGINATOR + "=" + mExternalNumber + "&"
+			+ KEY_TARGET + "=" + mMyNumber + "&"
+			+ KEY_LONGITUDE + "=" + location.getLongitude() + "&"
+			+ KEY_LATITUDE + "=" + location.getLatitude() + "&"
+			+ KEY_ALTITUDE + "=" + location.getAltitude();
+		Thread thread = new Thread(new Runnable(){
+			  @Override
+			  public void run(){
+				  try { 
+					  new DefaultHttpClient().execute(new HttpGet(url));
+					  Log.d("phonar", "sent the location up");
+				  } catch (Exception e) {
+					  Log.e(PhonarApplication.TAG, "Network exception: " + e);
+				  }
+			  }
+		});
+		thread.run();
 	}
 	
 	// TODO: these
