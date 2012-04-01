@@ -183,11 +183,11 @@ public class Phonar extends Activity {
 
 	public static ArrayList<Person> getPeopleForDebugging() {
 		ArrayList<Person> people = new ArrayList<Person>();
-		Person person = new Person("2095597960", "Hamza", 40.346732,-74.661316, 0);
+		Person person = new Person("2095597960", "Hamza", 40.350191,-74.651252, 30);
 		people.add(person);
-		person = new Person("6096136481", "Zeerak", 40.346953,-74.66064, 0);
+		person = new Person("5744858990", "Rik", 40.350191,-74.652615, 30);
 		people.add(person);
-		person = new Person("6097516257", "Faaez", 40.346356,-74.662367, 0);
+		person = new Person("9876543210", "Kynan", 40.350191,-74.652615, 30);
 		people.add(person);
 		return people;
 	}

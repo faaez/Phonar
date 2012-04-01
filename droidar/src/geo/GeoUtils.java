@@ -205,10 +205,8 @@ public class GeoUtils {
 		
 		
 		Location location = new Location("40.349463,-74.652733");
-		//location.setLatitude(40.349463); // Sherrerd
-		//location.setLongitude(-74.652733);
-		location.setLatitude(40.346217);   // Foulke
-		location.setLongitude(-74.660962);
+		location.setLatitude(40.349463); // Sherrerd
+		location.setLongitude(-74.652733);
 		location.setAccuracy(0.000001F);
 		return location;
 		
@@ -234,10 +232,8 @@ public class GeoUtils {
 				*/
 				
 				Location location = new Location("40.349463,-74.652733");
-				//location.setLatitude(40.349463); // Sherrerd
-				//location.setLongitude(-74.652733);
-				location.setLatitude(40.346217);   // Foulke
-				location.setLongitude(-74.660962);
+				location.setLatitude(40.349463); // Sherrerd
+				location.setLongitude(-74.652733);
 				location.setAccuracy(0.000001F);
 				return location;
 				

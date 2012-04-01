@@ -2,7 +2,6 @@ package com.phonarapp.client;
 
 import geo.GeoObj;
 import gl.GL1Renderer;
-import gl.GLCamera;
 import gl.GLFactory;
 import gl.animations.AnimationFaceToCamera;
 import gl.scenegraph.MeshComponent;
@@ -12,6 +11,7 @@ import java.util.ArrayList;
 
 import system.DefaultARSetup;
 import util.Vec;
+import worldData.Obj;
 import worldData.World;
 import android.app.Activity;
 import android.content.ContentResolver;
@@ -19,12 +19,17 @@ import android.content.ContentUris;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.PhoneLookup;
+import android.util.Log;
 import android.widget.Toast;
+
+import commands.Command;
 
 public class AugmentImage extends Activity {
 	private ArrayList<Person> people;
@@ -110,6 +115,8 @@ public class AugmentImage extends Activity {
 					*/
 					
 					// this is ugly, but it's 2:30 am and the demo is tomorrow.
+					
+					// add person
 					o[i] = new GeoObj(p.getLatitude(), p.getLongitude(), p.getAltitude());
 					photo[i] = getPhoto(p.getPhoneNumber());
 					int new_height = (int)(1+(1.2*photo[i].getHeight()));
@@ -133,7 +140,15 @@ public class AugmentImage extends Activity {
 							pixels[(j*new_width)+k] = Color.WHITE;
 						}
 					}
-					toShow[i] = Bitmap.createBitmap(pixels, new_width, new_height, Bitmap.Config.ARGB_8888);
+					// add name to image
+					Bitmap temp = Bitmap.createBitmap(pixels, new_width, new_height, Bitmap.Config.ARGB_8888);
+					toShow[i] = temp.copy(Bitmap.Config.ARGB_8888, true);
+					Canvas canvas = new Canvas(toShow[i]);
+					Paint paint = new Paint();
+					paint.setColor(Color.RED);
+					paint.setTextSize(5000F);
+					canvas.drawText(p.getName(), 0.5F, 0.083F, paint);
+					// add to world
 					shape[i] = objectFactory.newTexturedSquare("LOL"+i, toShow[i], 1.0F);
 					shape[i].setScale(new Vec(10, 10, 10));
 					shape[i].addAnimation(new AnimationFaceToCamera(camera, 0.5f));
@@ -146,9 +161,11 @@ public class AugmentImage extends Activity {
 					world.add(o2[i]);
 					*/
 					// text
-					GLCamera glcam = new GLCamera();
-					o3[i] = new GeoObj(p.getLatitude(), p.getLongitude(), p.getAltitude());
-					o3[i].setComp(objectFactory.newTextObject("Hello", new Vec(0, 0, 0), getApplicationContext(), glcam));
+					o3[i] = new GeoObj(p.getLatitude(), p.getLongitude(), p.getAltitude()-10);
+					Log.d("NAME", p.getName());
+					Obj text = objectFactory.newTextObject("Hello", new Vec(0, 0, 0), getApplicationContext(), camera);
+					text.setColor(gl.Color.blackTransparent());
+					o3[i].setComp(text);
 					world.add(o3[i]);
 					
 					objectFactory.newSolarSystem(new Vec(0, 1, 0));
