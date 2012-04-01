@@ -20,14 +20,14 @@ public class PhonarItemizedMapOverlay extends ItemizedOverlay {
 		this.context = context;
 	}
 
-	@Override
+	/*@Override
 	public boolean onTouchEvent(MotionEvent event, MapView mapview){
         if (event.getAction()==1){
         	Intent arIntent = new Intent(context, AugmentImage.class);
 			context.startActivity(arIntent);
         }
         return false;
-    }
+    }*/
 
 	@Override
 	protected OverlayItem createItem(int i) {
