@@ -1,5 +1,6 @@
 package com.phonarapp.client;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.apache.http.client.methods.HttpGet;
@@ -78,8 +79,6 @@ public class Phonar extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 		final Context context = this;
-
-		((PhonarApplication) getApplication()).setPeople(getPeopleForDebugging());
 
 		Button registerButton = (Button) findViewById(R.id.register_button);
 		registerButton.setOnClickListener(new View.OnClickListener() {
@@ -184,16 +183,16 @@ public class Phonar extends Activity {
 		.putString(KEY_USER_NUMBER, number).commit();
 	}
 
-	public static HashMap<String, Person> getPeopleForDebugging() {
-		HashMap<String, Person> people = new HashMap<String, Person>();
+	public static ArrayList<Person> getPeopleForDebugging() {
+		ArrayList<Person> people = new ArrayList<Person>();
 		Person person = new Person("12", "Clem", 37.7793, -122.4192, 36);
-		people.put("12", person);
+		people.add(person);
 		person = new Person("34", "Jorge", 36.683333, -122.766667, 36);
-		people.put("34", person);
+		people.add(person);
 		person = new Person("56", "Jeff", 37.683333, -124.766667, 36);
-		people.put("56", person);
+		people.add(person);
 		person = new Person("78", "Faaez", 38.683333, -121.766667, 36);
-		people.put("78", person);
+		people.add(person);
 
 		return people;
 	}

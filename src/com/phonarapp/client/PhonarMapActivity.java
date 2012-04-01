@@ -57,7 +57,7 @@ public class PhonarMapActivity extends MapActivity {
 		itemizedOverlay = new PhonarItemizedMapOverlay(drawable, this.getBaseContext());
 
 		//Person person = Phonar.getPeopleForDebugging().get("34");
-		for (Person person : ((PhonarApplication) getApplication()).getPeople().values()) {
+		for (Person person : ((PhonarApplication) getApplication()).getPeople()) {
 			GeoPoint point = new GeoPoint((int)(person.getLatitude() * 1E6), (int)(person.getLongitude() * 1E6));
 			OverlayItem overlayitem = new OverlayItem(point, person.getName(), person.getPhoneNumber());
 		itemizedOverlay.addOverlay(overlayitem);

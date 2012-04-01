@@ -1,5 +1,6 @@
 package com.phonarapp.client;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.apache.http.client.methods.HttpGet;
@@ -123,6 +124,8 @@ public class MessageService extends Service {
 			double longitude = Double.parseDouble(extras.getString(LocationHandler.KEY_LONGITUDE));
 			String target = extras.getString(LocationHandler.KEY_TARGET);
 			
+			((PhonarApplication)getApplication()).addPerson(latitude, longitude, target);
+			
 			int icon = R.drawable.notification23;
 			CharSequence tickerText = target + " has accepted your request";
 			long when = System.currentTimeMillis();
@@ -162,9 +165,9 @@ public class MessageService extends Service {
 			//TODO: make notification trigger location sharing
 
 			//HashMap for converting a number into a person's name
-			HashMap<String, Person> people = ((PhonarApplication)getApplication()).getPeople();
+			ArrayList<Person> people = ((PhonarApplication)getApplication()).getPeople();
 			String name = number;
-			for (Person p : people.values()) {
+			for (Person p : people) {
 				if (p.getPhoneNumber().equals(number)) {
 					name = p.getName();
 					break;
