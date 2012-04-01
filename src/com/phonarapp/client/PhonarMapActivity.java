@@ -1,5 +1,6 @@
 package com.phonarapp.client;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.graphics.drawable.Drawable;
@@ -56,8 +57,9 @@ public class PhonarMapActivity extends MapActivity {
 		drawable = this.getResources().getDrawable(R.drawable.androidmarker);
 		itemizedOverlay = new PhonarItemizedMapOverlay(drawable, this.getBaseContext());
 
-		//Person person = Phonar.getPeopleForDebugging().get("34");
-		for (Person person : ((PhonarApplication) getApplication()).getPeople()) {
+		ArrayList<Person> people = ((PhonarApplication) getApplication()).getPeople();
+		if (people.isEmpty()) people = Phonar.getPeopleForDebugging();
+		for (Person person : people) {
 			GeoPoint point = new GeoPoint((int)(person.getLatitude() * 1E6), (int)(person.getLongitude() * 1E6));
 			OverlayItem overlayitem = new OverlayItem(point, person.getName(), person.getPhoneNumber());
 		itemizedOverlay.addOverlay(overlayitem);

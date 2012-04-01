@@ -13,7 +13,6 @@ import gl.scenegraph.MeshComponent;
 
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import system.DefaultARSetup;
 import util.Vec;
