@@ -77,6 +77,7 @@ public class ImageTransform {
 
 	public static Bitmap resizeBitmap(Bitmap bitmap, float newHeight,
 			float newWidth) {
+		/*
 		int width = bitmap.getWidth();
 		int height = bitmap.getHeight();
 		float scaleWidth = ((float) newWidth) / width;
@@ -84,6 +85,8 @@ public class ImageTransform {
 		Matrix matrix = new Matrix();
 		matrix.postScale(scaleWidth, scaleHeight);
 		return Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
+		*/
+		return bitmap;
 	}
 
 	/**

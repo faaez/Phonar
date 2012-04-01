@@ -62,7 +62,10 @@ public class AugmentImage extends Activity {
 
 		this.people = ((PhonarApplication)getApplication()).getPeople();
 
-		if (people.isEmpty()) {
+		if (people == null) { 
+			people = Phonar.getPeopleForDebugging();
+		}
+		else if (people.isEmpty()) {
 			people = Phonar.getPeopleForDebugging();
 		}
 

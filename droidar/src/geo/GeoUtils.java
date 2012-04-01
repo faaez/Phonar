@@ -202,12 +202,19 @@ public class GeoUtils {
 			}
 		}
 		Log.d(LOG_TAG, "current position=" + l);
+		
+		
 		Location location = new Location("40.349463,-74.652733");
-		location.setLatitude(40.349463);
-		location.setLongitude(-74.652733);
+		//location.setLatitude(40.349463); // Sherrerd
+		//location.setLongitude(-74.652733);
+		location.setLatitude(40.346217);   // Foulke
+		location.setLongitude(-74.660962);
 		location.setAccuracy(0.000001F);
-		//return l;
 		return location;
+		
+		/*
+		return l;
+		*/
 	}
 
 	public Location getCurrentLocation() {
@@ -221,13 +228,19 @@ public class GeoUtils {
 						.getSystemService(Context.LOCATION_SERVICE);
 				Criteria criteria = new Criteria();
 				criteria.setAccuracy(accuracy);
-				//return lm.getLastKnownLocation(lm.getBestProvider(criteria,
-				//		true));
+				/*
+				return lm.getLastKnownLocation(lm.getBestProvider(criteria,
+						true));
+				*/
+				
 				Location location = new Location("40.349463,-74.652733");
-				location.setLatitude(40.349463);
-				location.setLongitude(-74.652733);
+				//location.setLatitude(40.349463); // Sherrerd
+				//location.setLongitude(-74.652733);
+				location.setLatitude(40.346217);   // Foulke
+				location.setLongitude(-74.660962);
 				location.setAccuracy(0.000001F);
 				return location;
+				
 			} catch (Exception e) {
 				Log.e(LOG_TAG, "Could not receive the current location");
 				e.printStackTrace();
