@@ -195,7 +195,7 @@ public class MessageService extends Service {
 			AlertDialog.Builder builder = new AlertDialog.Builder(context);
 			builder.setPositiveButton("Yes", mShareLocationListener)
 			.setNegativeButton("No", mEmptyListener)
-			.setTitle("Share your location with " + number + " ?");
+			.setTitle("Share your location with " + name + " ?");
 			builder.create().show();
 			} catch (BadTokenException e) {}
 	
