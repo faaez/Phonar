@@ -4,6 +4,7 @@ import geo.GeoObj;
 import gl.GL1Renderer;
 import gl.GLCamera;
 import gl.GLFactory;
+import gl.animations.AnimationFaceToCamera;
 import gl.scenegraph.MeshComponent;
 
 import java.io.InputStream;
@@ -18,7 +19,6 @@ import android.content.ContentUris;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -91,6 +91,7 @@ public class AugmentImage extends Activity {
 					photo[i] = getPhoto(p.getPhoneNumber());
 					shape[i] = objectFactory.newTexturedSquare("LOL"+i, photo[i], 1.0F);
 					shape[i].setScale(new Vec(10, 10, 10));
+					shape[i].addAnimation(new AnimationFaceToCamera(camera, 0.5f));
 					o[i].setComp(shape[i]);
 					world.add(o[i]);
 					
@@ -116,6 +117,8 @@ public class AugmentImage extends Activity {
 					o3[i] = new GeoObj(p.getLatitude(), p.getLongitude(), p.getAltitude());
 					o3[i].setComp(objectFactory.newTextObject(p.getName(), new Vec(0, 0, 0), getApplicationContext(), glcam));
 					world.add(o3[i]);
+					
+					objectFactory.newSolarSystem(new Vec(0, 1, 0));
 					
 					i++;
 					

@@ -561,6 +561,7 @@ public class GLFactory {
 
 		TextView v = new TextView(context);
 		v.setTypeface(null, Typeface.BOLD);
+		v.setTextColor(android.graphics.Color.BLACK);
 		// Set textcolor to black:
 		// v.setTextColor(new Color(0, 0, 0, 1).toIntARGB());
 		v.setText(textToDisplay);
