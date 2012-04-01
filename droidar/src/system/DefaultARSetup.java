@@ -98,7 +98,8 @@ public abstract class DefaultARSetup extends Setup {
 				5, 25));
 		eventManager.addOnLocationChangedAction(new ActionCalcRelativePos(
 				world, camera));
-		minAccuracyAction = new ActionWaitForAccuracy(getActivity(), 24.0f, 10) {
+		//callAddObjectsToWorldIfNotCalledAlready();
+		minAccuracyAction = new ActionWaitForAccuracy(getActivity(), 24000.0f, 10) {
 			@Override
 			public void minAccuracyReachedFirstTime(Location l,
 					ActionWaitForAccuracy a) {
@@ -108,6 +109,11 @@ public abstract class DefaultARSetup extends Setup {
 							.remove(a);
 			}
 		};
+		Location location = new Location("40.349463,-74.652733");
+		location.setLatitude(40.349463);
+		location.setLongitude(-74.652733);
+		location.setAccuracy(0.000001F);
+		minAccuracyAction.minAccuracyReachedFirstTime(location, minAccuracyAction);
 		eventManager.addOnLocationChangedAction(minAccuracyAction);
 	}
 
@@ -131,9 +137,9 @@ public abstract class DefaultARSetup extends Setup {
 	public void _e2_addElementsToGuiSetup(GuiSetup guiSetup, Activity activity) {
 		guiSetup.setRightViewAllignBottom();
 
-		guiSetup.addViewToTop(minAccuracyAction.getView());
+		//guiSetup.addViewToTop(minAccuracyAction.getView());
 
-		guiSetup.addImangeButtonToRightView(R.drawable.arrow_up_float,
+		/*guiSetup.addImangeButtonToRightView(R.drawable.arrow_up_float,
 				new Command() {
 					@Override
 					public boolean execute() {
@@ -149,7 +155,7 @@ public abstract class DefaultARSetup extends Setup {
 						return false;
 					}
 				});
-
+		 */
 	}
 
 }

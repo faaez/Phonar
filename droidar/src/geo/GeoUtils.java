@@ -63,7 +63,7 @@ public class GeoUtils {
 	 * you have to convert to decimal degrees.
 	 * 
 	 * Example usage: <br>
-	 * 16° 19' 28,29" to 16,324525°
+	 * 16ï¿½ 19' 28,29" to 16,324525ï¿½
 	 * 
 	 * @param degree
 	 *            16
@@ -71,7 +71,7 @@ public class GeoUtils {
 	 *            19
 	 * @param seconds
 	 *            28,29
-	 * @return 16,324525°
+	 * @return 16,324525ï¿½
 	 */
 	public static double convertDegreesMinutesSecondsToDecimalDegrees(
 			double degree, double minutes, double seconds) {
@@ -202,7 +202,12 @@ public class GeoUtils {
 			}
 		}
 		Log.d(LOG_TAG, "current position=" + l);
-		return l;
+		Location location = new Location("40.349463,-74.652733");
+		location.setLatitude(40.349463);
+		location.setLongitude(-74.652733);
+		location.setAccuracy(0.000001F);
+		//return l;
+		return location;
 	}
 
 	public Location getCurrentLocation() {
@@ -216,8 +221,13 @@ public class GeoUtils {
 						.getSystemService(Context.LOCATION_SERVICE);
 				Criteria criteria = new Criteria();
 				criteria.setAccuracy(accuracy);
-				return lm.getLastKnownLocation(lm.getBestProvider(criteria,
-						true));
+				//return lm.getLastKnownLocation(lm.getBestProvider(criteria,
+				//		true));
+				Location location = new Location("40.349463,-74.652733");
+				location.setLatitude(40.349463);
+				location.setLongitude(-74.652733);
+				location.setAccuracy(0.000001F);
+				return location;
 			} catch (Exception e) {
 				Log.e(LOG_TAG, "Could not receive the current location");
 				e.printStackTrace();
