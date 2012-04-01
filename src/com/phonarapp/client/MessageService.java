@@ -137,7 +137,7 @@ public class MessageService extends Service {
 			Context appContext = getApplicationContext();
 			CharSequence contentTitle = target + " is sharing location";
 			CharSequence contentText = "Touch here to view";
-			Intent notificationIntent = new Intent(this, PhonarMapActivity.class);
+			Intent notificationIntent = new Intent(this, AugmentImage.class);
 			notificationIntent.putExtra(LocationHandler.KEY_LATITUDE, latitude);
 			notificationIntent.putExtra(LocationHandler.KEY_LONGITUDE, longitude);
 
