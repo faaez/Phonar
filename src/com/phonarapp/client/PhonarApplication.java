@@ -38,7 +38,9 @@ public class PhonarApplication extends Application {
 	/** key for registrationId from Google that app must send to server */
 	public static String REGISTRATION_ID_PARAM = "registrationId";
 
-	public void setPeople(HashMap<String, Person> people) {
+	public void addPeople(double latitude, double longitude) {
+		if (this.people == null) this.people = new HashMap<String, Person>();
+		this.people.add
 		this.people = people;
 	}
 
