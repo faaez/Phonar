@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="register">lol phonar</string>
+    <string name="register">Register</string>
     <string name="app_name">Phonar</string>
-    <string name="unregister">wtf phonar</string>
+    <string name="unregister">Unregister</string>
     <string name="callback">In callback</string>
-    <string name="ar_name">Augmented Reality</string>
-    <string name="phonar">phonar someone :O</string>
+    <string name="ar_name">Augmented Reality View</string>
+    <string name="phonar">Find a friend</string>
     <string name="poll">poll</string>
     <string name="test_ar">Test AR View</string>
     <string name="map_name">View Friends on Map</string>

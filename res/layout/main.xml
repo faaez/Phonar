@@ -9,12 +9,14 @@
 	    android:layout_width="fill_parent" 
 	    android:layout_height="wrap_content" 
 	    android:text="@string/register"
+	    android:visibility="gone"
 	/>
 	<Button
 	    android:id="@+id/unregister_button"
 	    android:layout_width="fill_parent" 
         android:layout_height="wrap_content" 
         android:text="@string/unregister"
+        android:visibility="gone"
     />
     <Button
         android:id="@+id/phonar_button"
@@ -45,5 +47,6 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/test_ar"
+        android:visibility="gone"
     />
 </LinearLayout>
