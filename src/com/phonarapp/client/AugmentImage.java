@@ -19,6 +19,7 @@ import android.content.ContentUris;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -80,6 +81,7 @@ public class AugmentImage extends Activity {
 				GeoObj[] o2 = new GeoObj[people.size()];  // background geo object
 				GeoObj[] o3 = new GeoObj[people.size()];  // name geo object
 				Bitmap[] photo = new Bitmap[people.size()];
+				Bitmap[] toShow = new Bitmap[people.size()];
 				MeshComponent[] shape = new MeshComponent[people.size()];
 				MeshComponent[] bg = new MeshComponent[people.size()];
 
@@ -87,7 +89,7 @@ public class AugmentImage extends Activity {
 				// add all objects
 
 				for (Person p:people) {
-					o[i] = new GeoObj(p.getLatitude(), p.getLongitude(), p.getAltitude());
+					/*o[i] = new GeoObj(p.getLatitude(), p.getLongitude(), p.getAltitude());
 					photo[i] = getPhoto(p.getPhoneNumber());
 					shape[i] = objectFactory.newTexturedSquare("LOL"+i, photo[i], 1.0F);
 					shape[i].setScale(new Vec(10, 10, 10));
@@ -95,27 +97,58 @@ public class AugmentImage extends Activity {
 					o[i].setComp(shape[i]);
 					world.add(o[i]);
 					
-					
-					
 					// background
-					/*
 					o2[i] = new GeoObj(p.getLatitude(), p.getLongitude(), p.getAltitude());
 					Bitmap bitmap = Bitmap.createBitmap(photo[i].getWidth(), photo[i].getHeight(), Bitmap.Config.RGB_565);
 					bitmap.eraseColor(Color.WHITE);
+					bitmap.eraseColor(gl.Color.white().toIntARGB());
 					bg[i] = objectFactory.newTexturedSquare("Lolzies"+i, bitmap, 1.2F);
 					bg[i].setScale(new Vec(10, 10, 10));
+					bg[i].addAnimation(new AnimationFaceToCamera(camera, 0.5f));
 					o2[i].setComp(bg[i]);
 					world.add(o2[i]);
 					*/
 					
+					// this is ugly, but it's 2:30 am and the demo is tomorrow.
+					o[i] = new GeoObj(p.getLatitude(), p.getLongitude(), p.getAltitude());
+					photo[i] = getPhoto(p.getPhoneNumber());
+					int new_height = (int)(1+(1.2*photo[i].getHeight()));
+					int new_width = 2 + photo[i].getWidth();
+					int[] pixels = new int[new_height*new_width];
+					int j = 0, k = 0;
+					for (j = 0; j < new_width; j++) { // top border
+						pixels[j] = Color.WHITE; 
+					}
+					for (j = 0; j < new_height; j++) { // left and right borders
+						pixels[j*new_width] = Color.WHITE;
+						pixels[(j*new_width)+new_width-1] = Color.WHITE;
+					}
+					for (j = 0; j < photo[i].getHeight(); j++) { // image
+						for (k = 0; k < photo[i].getWidth(); k++) { 
+							pixels[((j+1)*new_width)+k+1] = photo[i].getPixel(k, j);
+						}
+					}
+					for (j = photo[i].getHeight()+1; j < new_height; j++) { // bottom border
+						for (k = 0; k < new_width; k++) {
+							pixels[(j*new_width)+k] = Color.WHITE;
+						}
+					}
+					toShow[i] = Bitmap.createBitmap(pixels, new_width, new_height, Bitmap.Config.ARGB_8888);
+					shape[i] = objectFactory.newTexturedSquare("LOL"+i, toShow[i], 1.0F);
+					shape[i].setScale(new Vec(10, 10, 10));
+					shape[i].addAnimation(new AnimationFaceToCamera(camera, 0.5f));
+					o[i].setComp(shape[i]);
+					world.add(o[i]);
+					
+					/*
 					o2[i] = new GeoObj(p.getLatitude(), p.getLongitude(), p.getAltitude());
 					o2[i].setComp(objectFactory.newArrow());
 					world.add(o2[i]);
-					
+					*/
 					// text
 					GLCamera glcam = new GLCamera();
 					o3[i] = new GeoObj(p.getLatitude(), p.getLongitude(), p.getAltitude());
-					o3[i].setComp(objectFactory.newTextObject(p.getName(), new Vec(0, 0, 0), getApplicationContext(), glcam));
+					o3[i].setComp(objectFactory.newTextObject("Hello", new Vec(0, 0, 0), getApplicationContext(), glcam));
 					world.add(o3[i]);
 					
 					objectFactory.newSolarSystem(new Vec(0, 1, 0));
