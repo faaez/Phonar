@@ -19,6 +19,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
+import android.view.WindowManager.BadTokenException;
 
 /**
  * MessageService is an IntentService that handles communicating messages
@@ -189,13 +190,14 @@ public class MessageService extends Service {
 			final int id = 1;
 
 			notificationManager.notify(id, notification);
-			
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+			try {
+			AlertDialog.Builder builder = new AlertDialog.Builder(context);
 			builder.setPositiveButton("Yes", mShareLocationListener)
 			.setNegativeButton("No", mEmptyListener)
 			.setTitle("Share your location with " + number + " ?");
 			builder.create().show();
-
+			} catch (BadTokenException e) {}
 	
 			Log.d(PhonarApplication.TAG,
 					"extracted number in type_request_location: " + number);
