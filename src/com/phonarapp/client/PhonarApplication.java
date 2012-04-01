@@ -46,7 +46,6 @@ public class PhonarApplication extends Application {
 		Uri uri = Uri.withAppendedPath(PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
 		Cursor cursor = getContentResolver().query(uri, new String[]{PhoneLookup.DISPLAY_NAME}, null, null, null);
 		if (cursor.moveToFirst()) {  
-			String contactId = cursor.getString(cursor.getColumnIndex(ContactsContract.PhoneLookup._ID));
 		    name = cursor.getString(cursor.getColumnIndex(ContactsContract.PhoneLookup.DISPLAY_NAME));
 		}
 		

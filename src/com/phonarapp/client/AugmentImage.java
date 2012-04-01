@@ -149,11 +149,18 @@ public class AugmentImage extends Activity {
 					paint.setTextSize(14*scale);
 					paint.setFlags(Paint.ANTI_ALIAS_FLAG);
 					Rect bounds = new Rect();
-					paint.getTextBounds(p.getName(), 0, p.getName().length(), bounds);
+					String name = p.getName();
+					Uri uri = Uri.withAppendedPath(PhoneLookup.CONTENT_FILTER_URI, Uri.encode(p.getPhoneNumber()));
+					Cursor cursor = getContentResolver().query(uri, new String[]{PhoneLookup.DISPLAY_NAME}, null, null, null);
+					if (cursor.moveToFirst()) {  
+					    name = cursor.getString(cursor.getColumnIndex(ContactsContract.PhoneLookup.DISPLAY_NAME));
+					}
+					name = name.split(" ")[0];
+					paint.getTextBounds(name, 0, name.length(), bounds);
 					int x = (temp.getWidth() - bounds.width())/2;
 					int y = 300*(temp.getHeight() - bounds.height())/400;
 					canvas.drawBitmap(temp, 0, 0, null);
-					canvas.drawText(p.getName(), x*scale, y*scale, paint);
+					canvas.drawText(name, x*scale, y*scale, paint);
 					
 					
 					// add to world
