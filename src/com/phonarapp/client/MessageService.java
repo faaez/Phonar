@@ -123,7 +123,8 @@ public class MessageService extends Service {
 		if (TYPE_PROVIDING_LOCATION.equals(type)) {
 			double latitude = Double.parseDouble(extras.getString(LocationHandler.KEY_LATITUDE));
 			double longitude = Double.parseDouble(extras.getString(LocationHandler.KEY_LONGITUDE));
-			String target = extras.getString(LocationHandler.KEY_TARGET);
+			String number = extras.getString(LocationHandler.KEY_TARGET);
+			String target = Util.getNameByPhoneNumber(number, getContentResolver());
 			
 			((PhonarApplication)getApplication()).addPerson(latitude, longitude, target);
 			
@@ -166,8 +167,8 @@ public class MessageService extends Service {
 			//TODO: make notification trigger location sharing
 
 			//HashMap for converting a number into a person's name
-			ArrayList<Person> people = ((PhonarApplication)getApplication()).getPeople();
-			String name = number;
+			//ArrayList<Person> people = ((PhonarApplication)getApplication()).getPeople();
+			String name = Util.getNameByPhoneNumber(number, getContentResolver());
 			/*for (Person p : people) {
 				if (p.getPhoneNumber().equals(number)) {
 					name = p.getName();
@@ -237,7 +238,7 @@ public class MessageService extends Service {
 					try {
 						String url = PhonarApplication.REGISTRATION_URL
 							+ LocationHandler.KEY_ORIGINATOR
-							+ "=" + getNumber(context)
+							+ "=" + Util.getNumber(context)
 							+ "&" + PhonarApplication.REGISTRATION_ID_PARAM
 							+ "=" + registration[0];
 						HttpResponse response = new DefaultHttpClient().execute(new HttpGet(url));
@@ -249,12 +250,6 @@ public class MessageService extends Service {
 				}
 			}.execute(registration);
 		}
-	}
-
-	/** Returns this device's number as entered by the user */
-	public static String getNumber(Context context) {
-		return context.getSharedPreferences("default", Context.MODE_PRIVATE)
-				.getString(Phonar.KEY_USER_NUMBER, null);
 	}
 
 	@Override

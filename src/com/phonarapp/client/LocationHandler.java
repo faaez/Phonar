@@ -33,7 +33,7 @@ class LocationHandler implements LocationListener {
 	public LocationHandler(Context context, String externalNumber) {
 		mContext = context;
 		mExternalNumber = externalNumber;
-		mMyNumber = MessageService.getNumber(mContext);
+		mMyNumber = Util.getNumber(mContext);
 	}
 
 	public void onLocationChanged(Location location) {

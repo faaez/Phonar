@@ -3,11 +3,6 @@ package com.phonarapp.client;
 import java.util.ArrayList;
 
 import android.app.Application;
-import android.database.Cursor;
-import android.net.Uri;
-import android.provider.ContactsContract;
-import android.provider.ContactsContract.CommonDataKinds.Phone;
-import android.provider.ContactsContract.PhoneLookup;
 import android.util.Log;
 
 /**
@@ -42,12 +37,7 @@ public class PhonarApplication extends Application {
 
 	public void addPerson(double latitude, double longitude, String phoneNumber) {
 		if (this.people == null) this.people = new ArrayList<Person>();
-		String name = "";
-		Uri uri = Uri.withAppendedPath(PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
-		Cursor cursor = getContentResolver().query(uri, new String[]{PhoneLookup.DISPLAY_NAME}, null, null, null);
-		if (cursor.moveToFirst()) {  
-		    name = cursor.getString(cursor.getColumnIndex(ContactsContract.PhoneLookup.DISPLAY_NAME));
-		}
+		String name = Util.getNameByPhoneNumber(phoneNumber, getContentResolver());
 		
 		this.people.add(new Person(phoneNumber, name, latitude, longitude, 0.0));
 		Log.d("adding new person:", phoneNumber);

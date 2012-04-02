@@ -1,3 +1,7 @@
+/**
+ * REMOVE THIS?
+ */
+
 //package com.phonarapp.client;
 //
 //import java.util.List;

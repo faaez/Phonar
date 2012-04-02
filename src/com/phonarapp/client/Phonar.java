@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.PendingIntent;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
@@ -16,10 +17,10 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Contacts.PeopleColumns;
-import android.provider.Contacts.PhonesColumns;
+import android.provider.ContactsContract;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.provider.ContactsContract.Contacts;
+import android.provider.ContactsContract.PhoneLookup;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
@@ -37,12 +38,14 @@ public class Phonar extends Activity {
 	/** Temporary solution until we integrate with contacts */
 	private EditText mTargetNumber;
 
-	/** OnClickListener for dialog asking user to input their number */
+	/** 
+	 * OnClickListener for dialog asking user to input their number 
+	 */
 	private final OnClickListener mSaveClickListener = new OnClickListener() {
 		public void onClick(DialogInterface dialog, int which) {
 			// must be positive button; nothing else yet. also no error check
-			setUserNumber(standardizePhoneNumber(
-					mUserNumberEditText.getText().toString()));
+			setUserNumber(Util.standardizePhoneNumber(
+					mUserNumberEditText.getText().toString(), Phonar.this));
 			Intent registrationIntent = new Intent(
 					"com.google.android.c2dm.intent.REGISTER");
 					registrationIntent.putExtra("app", PendingIntent
@@ -53,18 +56,23 @@ public class Phonar extends Activity {
 		}
 	};
 
-	/** OnClickListener for dialog asking user who they want to bronar */
+	/** 
+	 * OnClickListener for dialog asking user who they want to phonar 
+	 */
 	private final OnClickListener mBronarClickListener = new OnClickListener() {
 		public void onClick(DialogInterface dialog, int which) {
 			startPhonarRequest(mTargetNumber.getText().toString());
 		}
 	};
 
+	/**
+	 * Start request for phonaring
+	 */
 	private void startPhonarRequest(String targetNumberString) {
 		Log.d("location request:", "starting");
 		final String url = PhonarApplication.LOCATION_REQUEST_URL
 			+ LocationHandler.KEY_ORIGINATOR + "="
-			+ MessageService.getNumber(Phonar.this)
+			+ Util.getNumber(Phonar.this)
 			+ "&" + LocationHandler.KEY_TARGET + "="
 			+ targetNumberString;
 		Thread thread = new Thread(new Runnable(){
@@ -88,7 +96,9 @@ public class Phonar extends Activity {
 	/** key to SharedPreferences for the number this device's number */
 	public static final String KEY_USER_NUMBER = "userNumber";
 
-	/** Called when the activity is first created. */
+	/** 
+	 * Called when the activity is first created. 
+	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -165,6 +175,12 @@ public class Phonar extends Activity {
 	}
 
 	@Override
+	/**
+	 * Dialog boxes for entering number
+	 * @param id : if DIALOG_ENTER_USER_NUMBER_ID, then pops up dialog for user to enter own number. 
+	 * 			   if DIALOG_ENTER_EXTERNAL_NUMBER_ID, then pops up dialog for user to enter number 
+	 * 			   of friend they want to phonar
+	 */
 	protected Dialog onCreateDialog(int id) {
 		Dialog dialog;
 		switch(id) {
@@ -182,6 +198,7 @@ public class Phonar extends Activity {
 			mTargetNumber = new EditText(this);
 			mTargetNumber.setInputType(InputType.TYPE_CLASS_PHONE);
 			externalBuilder.setPositiveButton("BRONAR!", mBronarClickListener)
+			.setTitle("Enter 10-digit phone number of person who want to phonar: ")
 			.setView(mTargetNumber);
 			dialog = externalBuilder.create();
 			break;
@@ -200,6 +217,9 @@ public class Phonar extends Activity {
 		.putString(KEY_USER_NUMBER, number).commit();
 	}
 
+	/**
+	 * @return a list of fake data to add for debugging
+	 */
 	public static ArrayList<Person> getPeopleForDebugging() {
 		ArrayList<Person> people = new ArrayList<Person>();
 		Person person = new Person("2095597960", "Hamza", 40.350191,-74.651252, 30);
@@ -211,6 +231,9 @@ public class Phonar extends Activity {
 		return people;
 	}
 
+	/**
+	 * Launches the contact picker for a user to pick whom they want to phonar with
+	 */
 	public void doLaunchContactPicker() {
 		Intent contactPickerIntent = new Intent(Intent.ACTION_PICK,  
 	            Contacts.CONTENT_URI);  
@@ -218,6 +241,9 @@ public class Phonar extends Activity {
 	}
 
 	@Override
+	/**
+	 * 
+	 */
 	public void onActivityResult(int reqCode, int resultCode, Intent data) {
 		String phoneNumber;
 		super.onActivityResult(reqCode, resultCode, data);
@@ -234,35 +260,12 @@ public class Phonar extends Activity {
 				if (cursor.moveToFirst()) {  
 					int phoneIdx = cursor.getColumnIndex(Phone.DATA);  
 					phoneNumber = cursor.getString(phoneIdx);  
-					Log.i(TAG, "PHONE:" + standardizePhoneNumber(phoneNumber));
-					startPhonarRequest(standardizePhoneNumber(phoneNumber));
+					Log.i(TAG, "PHONE:" + Util.standardizePhoneNumber(phoneNumber, Phonar.this));
+					startPhonarRequest(Util.standardizePhoneNumber(phoneNumber, Phonar.this));
 				}
 
 			}
 		break;
 		}
 	}
-
-	public String standardizePhoneNumber(String number) {
-		StringBuilder builder = new StringBuilder();
-		for (Character c : number.toCharArray()) {
-			if (Character.isDigit(c)) {
-				builder.append(c);
-			}
-		}
-		String result = builder.toString();
-		if (result.length() != 10) {
-			if (result.length() == 11 && result.charAt(0) == '1') {
-				return result.substring(1);
-			} else if (result.length() == 7) {
-				return String.format("%s%s",
-						MessageService.getNumber(this).substring(0, 3), result);
-			} else {
-				return "bad number";
-			}
-		} else {
-			return result;
-		}
-	}
-
 }
