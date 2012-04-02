@@ -2,14 +2,18 @@ So here are a bunch of todos I'm adding that are fresh in my mind right now. Add
 
 General issues:
 1. Remove hardcoded locations
+2. Security of user's phone number and locations
+3. Two-way phonaring: When you ask someone to bronar you to see their location, they should be able to see your location too.
 
 UI issues:
 1. Figure out why images are not showing on Nitin's phone
 2. Display distance to a person under their icon. If we do this, maybe we don't need to change the image size as you move closer and further away, since it doesn't work for people who are really far away. This will also allow us to ensure that text below a person's face is always visible.
 3. Prettify the text under a person's icon
-4. Everywhere where it says "1234567890 wants to phonar you", display their name. If no name available, then only display number. We already have a function to convert number to name, so shouldn't be too hard
-5. Map view should autozoom in to the location (depending on accuracy)
-6. Maybe at a later stage, we should display the path to people's locations in the map view.
+4. If the person is not in the screen, put an arrow on the screen to point to where they should move the camera to see them,
+5. Everywhere where it says "1234567890 wants to phonar you", display their name. If no name available, then only display number. We already have a function to convert number to name, so shouldn't be too hard
+6. Map view should autozoom in to the location (depending on accuracy)
+7. Display the path to people's locations in the map view.
+8. Option to bronar someone through text rather than push. This could have 2 advantages: 1) usable in places with no wifi/3G 2) SMS is naturally more attention-grabbing than a push notification.
 
 
 Server issues: 
