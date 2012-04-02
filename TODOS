@@ -14,8 +14,11 @@ UI issues:
 6. Map view should autozoom in to the location (depending on accuracy)
 7. Display the path to people's locations in the map view.
 8. Option to bronar someone through text rather than push. This could have 2 advantages: 1) usable in places with no wifi/3G 2) SMS is naturally more attention-grabbing than a push notification.
+9. Maybe implemented face recognition in the future
+10. Ignore push notifications if they are too old, no need sending location back if the user is seeing notification after a few hours of location being requested
+11. Add Share location / Decline buttons into push notification, so the user does not have to do 2 clicks but 1
 
 
 Server issues: 
-No clue lol
-
+1. Make it so it it auto refreshes auth token if it expires, rather than hard coding it into code.
+2. Try http requests (to and from server) atleast 3 times before giving up.
